@@ -1,0 +1,300 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Container,
+  Paper,
+  Typography,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Divider,
+  Alert,
+  CircularProgress,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { School, Person, LocationOn } from '@mui/icons-material';
+import { campusApi } from '../services/apiService';
+import { Campus } from '../types';
+
+const CampusSelector: React.FC = () => {
+  const [campuses, setCampuses] = useState<Campus[]>([]);
+  const [selectedCampus, setSelectedCampus] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadCampuses = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log('Attempting to fetch campuses from:', 'http://localhost:5253/api/Campus');
+        
+        // Try a simple fetch first to test CORS
+        try {
+          const testResponse = await fetch('http://localhost:5253/api/Campus');
+          console.log('Direct fetch test status:', testResponse.status);
+          const testData = await testResponse.json();
+          console.log('Direct fetch test data:', testData);
+        } catch (testError) {
+          console.error('Direct fetch test failed:', testError);
+        }
+        
+        const response = await campusApi.getAllCampuses();
+        console.log('Campus API response:', response);
+        
+        // Handle the response - it might be directly the array or wrapped in .data
+        const campusData = Array.isArray(response) ? response : response.data;
+        console.log('Campus data:', campusData);
+        setCampuses(campusData);
+      } catch (err: any) {
+        console.error('Error loading campuses:', err);
+        console.error('Error response:', err.response);
+        setError(`Failed to load campuses: ${err.message || 'Please try again.'}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCampuses();
+  }, []);
+
+  const handleCampusChange = (event: any) => {
+    setSelectedCampus(event.target.value);
+  };
+
+  const handleContinue = () => {
+    if (selectedCampus) {
+      // Store selected campus in localStorage for later use
+      const selectedCampusData = campuses.find(c => c.campusId === selectedCampus);
+      if (selectedCampusData) {
+        localStorage.setItem('selectedCampus', JSON.stringify(selectedCampusData));
+        // Navigate to enrollment registration
+        navigate('/enrollment-registration');
+      }
+    }
+  };
+
+  const handleSignIn = () => {
+    navigate('/login');
+  };
+
+  if (loading) {
+    return (
+      <Container component="main" maxWidth="md">
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            minHeight: '60vh',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress size={60} />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Loading campuses...
+          </Typography>
+        </Box>
+      </Container>
+    );
+  }
+
+  return (
+    <>
+      {/* Hero Banner */}
+      <Box
+        sx={{
+          width: '100%',
+          height: 300,
+          backgroundImage: 'url(https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            zIndex: 1,
+          },
+        }}
+      >
+        <Box
+          sx={{
+            textAlign: 'center',
+            color: 'white',
+            zIndex: 2,
+            position: 'relative',
+          }}
+        >
+          <School sx={{ fontSize: 80, mb: 2, color: 'white' }} />
+          <Typography component="h1" variant="h2" gutterBottom fontWeight="bold">
+            Welcome to Learner Center
+          </Typography>
+          <Typography variant="h5" sx={{ opacity: 0.9 }}>
+            Your educational journey starts here
+          </Typography>
+        </Box>
+      </Box>
+
+      <Container component="main" maxWidth="md">
+        <Box
+          sx={{
+            marginTop: 6,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            minHeight: '60vh',
+            paddingBottom: 4,
+          }}
+        >
+          {/* Section Header */}
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
+            <LocationOn color="primary" sx={{ fontSize: 50, mb: 2 }} />
+            <Typography component="h2" variant="h4" gutterBottom>
+              Choose Your Campus
+            </Typography>
+            <Typography variant="h6" color="textSecondary">
+              Select the campus where you would like to begin your educational journey
+            </Typography>
+          </Box>
+
+        <Paper elevation={3} sx={{ padding: 4, width: '100%', maxWidth: 600 }}>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {error}
+            </Alert>
+          )}
+
+          <Box sx={{ mt: 2 }}>
+            {/* Campus Selection */}
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel>Select Your Campus</InputLabel>
+              <Select
+                value={selectedCampus}
+                label="Select Your Campus"
+                onChange={handleCampusChange}
+                disabled={loading || campuses.length === 0}
+                MenuProps={{
+                  PaperProps: {
+                    style: {
+                      maxHeight: 300,
+                      overflow: 'auto',
+                    },
+                  },
+                }}
+              >
+                {campuses.map((campus) => (
+                  <MenuItem key={campus.campusId} value={campus.campusId}>
+                    <Box>
+                      <Typography variant="body1" fontWeight="medium">
+                        {campus.campusName}
+                      </Typography>
+                      {campus.city && campus.state && (
+                        <Typography variant="body2" color="textSecondary">
+                          {campus.city}, {campus.state}
+                        </Typography>
+                      )}
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            {/* Selected Campus Details */}
+            {selectedCampus && (
+              <Paper 
+                variant="outlined" 
+                sx={{ p: 2, mt: 3, backgroundColor: 'grey.50' }}
+              >
+                {(() => {
+                  const campus = campuses.find(c => c.campusId === selectedCampus);
+                  return campus ? (
+                    <Box>
+                      <Typography variant="h6" gutterBottom>
+                        {campus.campusName}
+                      </Typography>
+                      {campus.address && (
+                        <Typography variant="body2" color="textSecondary">
+                          📍 {campus.address}
+                          {campus.city && campus.state && campus.zipCode && (
+                            <>, {campus.city}, {campus.state} {campus.zipCode}</>
+                          )}
+                        </Typography>
+                      )}
+                      {campus.phoneNumber && (
+                        <Typography variant="body2" color="textSecondary">
+                          📞 {campus.phoneNumber}
+                        </Typography>
+                      )}
+                      {campus.email && (
+                        <Typography variant="body2" color="textSecondary">
+                          ✉️ {campus.email}
+                        </Typography>
+                      )}
+                    </Box>
+                  ) : null;
+                })()}
+              </Paper>
+            )}
+
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleContinue}
+              sx={{ mt: 3, mb: 2, py: 1.5 }}
+              disabled={!selectedCampus}
+            >
+              Continue to Enrollment
+            </Button>
+
+            <Divider sx={{ my: 3 }}>
+              <Typography variant="body2" color="textSecondary">
+                OR
+              </Typography>
+            </Divider>
+
+            {/* Existing User Login */}
+            <Box textAlign="center">
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                Already have an account?
+              </Typography>
+              <Button
+                variant="outlined"
+                startIcon={<Person />}
+                onClick={handleSignIn}
+                fullWidth
+                sx={{ py: 1.5 }}
+              >
+                Sign In to Your Account
+              </Button>
+            </Box>
+          </Box>
+        </Paper>
+
+        {/* Footer */}
+        <Box sx={{ mt: 4, textAlign: 'center' }}>
+          <Typography variant="body2" color="textSecondary">
+            Need help choosing a campus? Contact our admissions team
+          </Typography>
+        </Box>
+      </Box>
+    </Container>
+    </>
+  );
+};
+
+export default CampusSelector;

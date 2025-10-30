@@ -1,0 +1,25 @@
+{
+  "name": "learner-center",
+  "version": "1.0.0",
+  "description": "Learner Center - Full Stack Application",
+  "scripts": {
+    "install:frontend": "cd frontend && npm install",
+    "install:backend": "cd backend && dotnet restore",
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && dotnet run",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && dotnet build",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "install:all": "npm run install:frontend && npm run install:backend"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "keywords": ["learner-center", "education", "react", "dotnet", "typescript"],
+  "author": "Your Name",
+  "license": "MIT"
+}
