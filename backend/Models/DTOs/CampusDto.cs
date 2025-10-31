@@ -1,9 +1,5 @@
-namespace LearnerCenter.API.DTOs
+namespace LearnerCenter.API.Models.DTOs
 {
-    /// <summary>
-    /// Data Transfer Object for Campus information
-    /// Used for API responses to avoid exposing internal entity structure
-    /// </summary>
     public class CampusDto
     {
         public Guid CampusId { get; set; }

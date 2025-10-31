@@ -1,4 +1,4 @@
-namespace LearnerCenter.API.DTOs
+namespace LearnerCenter.API.Models.DTOs
 {
     public class EnrollmentDto
     {

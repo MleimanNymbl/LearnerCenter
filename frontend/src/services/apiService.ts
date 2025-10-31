@@ -61,6 +61,9 @@ export const coursesApi = {
   getCourse: (id: number) =>
     api.get<ApiResponse<Course>>(`/courses/${id}`),
   
+  getCoursesByEnrollment: (enrollmentId: string) =>
+    api.get<any[]>(`/Course/enrollment/${enrollmentId}`),
+  
   createCourse: (courseData: Omit<Course, 'id' | 'createdAt' | 'updatedAt'>) =>
     api.post<ApiResponse<Course>>('/courses', courseData),
   

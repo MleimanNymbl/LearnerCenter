@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using LearnerCenter.API.Interfaces;
-using LearnerCenter.API.DTOs;
+using LearnerCenter.API.Models.DTOs;
 
 namespace LearnerCenter.API.Controllers
 {
@@ -9,11 +9,13 @@ namespace LearnerCenter.API.Controllers
     public class EnrollmentController : ControllerBase
     {
         private readonly IEnrollmentService _enrollmentService;
+        private readonly ICourseService _courseService;
         private readonly ILogger<EnrollmentController> _logger;
 
-        public EnrollmentController(IEnrollmentService enrollmentService, ILogger<EnrollmentController> logger)
+        public EnrollmentController(IEnrollmentService enrollmentService, ICourseService courseService, ILogger<EnrollmentController> logger)
         {
             _enrollmentService = enrollmentService;
+            _courseService = courseService;
             _logger = logger;
         }
 
@@ -77,6 +79,32 @@ namespace LearnerCenter.API.Controllers
             {
                 _logger.LogError(ex, "Error retrieving enrollment {EnrollmentId}", enrollmentId);
                 return StatusCode(500, "An error occurred while retrieving the enrollment");
+            }
+        }
+
+        /// <summary>
+        /// Gets all courses associated with a specific enrollment
+        /// </summary>
+        /// <param name="enrollmentId">The enrollment ID</param>
+        /// <returns>List of courses for the specified enrollment</returns>
+        [HttpGet("{enrollmentId}/courses")]
+        public async Task<ActionResult<IEnumerable<object>>> GetCoursesByEnrollment(Guid enrollmentId)
+        {
+            try
+            {
+                _logger.LogInformation("API request received: Get courses for enrollment {EnrollmentId}", enrollmentId);
+                
+                var courses = await _courseService.GetCoursesByEnrollmentIdAsync(enrollmentId);
+                
+                _logger.LogInformation("API response: Retrieved {CourseCount} courses for enrollment {EnrollmentId}", 
+                    courses.Count(), enrollmentId);
+                
+                return Ok(courses);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving courses for enrollment {EnrollmentId}", enrollmentId);
+                return StatusCode(500, "An error occurred while retrieving courses");
             }
         }
     }

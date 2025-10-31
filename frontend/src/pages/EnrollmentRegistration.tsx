@@ -16,12 +16,22 @@ import {
   Chip,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { School, AccessTime, AttachMoney, ArrowBack, Groups } from '@mui/icons-material';
-import { enrollmentApi } from '../services/apiService';
+import { School, AccessTime, AttachMoney, ArrowBack, Groups, Visibility } from '@mui/icons-material';
+import { enrollmentApi, coursesApi } from '../services/apiService';
 import { Enrollment, Campus } from '../types';
 import HeroBanner from '../components/HeroBanner';
 import CampusInfoBanner from '../components/CampusInfoBanner';
 import LoadingSpinner from '../components/LoadingSpinner';
+import CourseDetailsModal from '../components/CourseDetailsModal';
+
+interface Course {
+  courseId: string;
+  courseCode: string;
+  courseName: string;
+  description: string;
+  creditHours: number;
+  isActive: boolean;
+}
 
 const EnrollmentRegistration: React.FC = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
@@ -29,11 +39,14 @@ const EnrollmentRegistration: React.FC = () => {
   const [selectedCampus, setSelectedCampus] = useState<Campus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [courseModalOpen, setCourseModalOpen] = useState(false);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [courseLoading, setCourseLoading] = useState(false);
+  const [courseError, setCourseError] = useState<string | null>(null);
   
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get selected campus from localStorage (passed from campus selector)
     const campusData = localStorage.getItem('selectedCampus');
     if (campusData) {
       const campus: Campus = JSON.parse(campusData);
@@ -90,6 +103,44 @@ const EnrollmentRegistration: React.FC = () => {
 
   const handleBackToCampus = () => {
     navigate('/');
+  };
+
+  const handleOpenCourseModal = async () => {
+    if (selectedEnrollment) {
+      setCourseModalOpen(true);
+      setCourseLoading(true);
+      setCourseError(null);
+      
+      try {
+        console.log('Fetching courses for enrollment:', selectedEnrollment);
+        const response = await coursesApi.getCoursesByEnrollment(selectedEnrollment);
+        console.log('Courses API response:', response);
+        
+        // Handle the response - it might be directly the array or wrapped in .data
+        const courseData = Array.isArray(response) ? response : response.data;
+        
+        if (Array.isArray(courseData)) {
+          setCourses(courseData as Course[]);
+          console.log('Loaded courses:', courseData);
+        } else {
+          console.error('Unexpected response format:', response);
+          setCourseError('Unexpected response format from server');
+          setCourses([]);
+        }
+      } catch (error) {
+        console.error('Error loading courses:', error);
+        setCourseError('Failed to load courses. Please try again.');
+        setCourses([]);
+      } finally {
+        setCourseLoading(false);
+      }
+    }
+  };
+
+  const handleCloseCourseModal = () => {
+    setCourseModalOpen(false);
+    setCourses([]);
+    setCourseError(null);
   };
 
   if (loading) {
@@ -170,9 +221,19 @@ const EnrollmentRegistration: React.FC = () => {
             
             <Card elevation={1} sx={{ mb: 3 }}>
               <CardContent>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                  {selectedEnrollmentData.name}
-                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                  <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                    {selectedEnrollmentData.name}
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    startIcon={<Visibility />}
+                    onClick={handleOpenCourseModal}
+                    sx={{ minWidth: 'auto' }}
+                  >
+                    View Courses
+                  </Button>
+                </Box>
                 
                 <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.6 }}>
                   {selectedEnrollmentData.description}
@@ -276,6 +337,19 @@ const EnrollmentRegistration: React.FC = () => {
         )}
       </Paper>
     </Container>
+
+    {/* Course Details Modal */}
+    {selectedEnrollmentData && (
+      <CourseDetailsModal
+        open={courseModalOpen}
+        onClose={handleCloseCourseModal}
+        enrollmentName={selectedEnrollmentData.name}
+        enrollmentDescription={selectedEnrollmentData.description}
+        courses={courses}
+        loading={courseLoading}
+        error={courseError}
+      />
+    )}
     </>
   );
 };

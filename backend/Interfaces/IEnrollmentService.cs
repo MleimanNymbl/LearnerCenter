@@ -1,4 +1,4 @@
-using LearnerCenter.API.DTOs;
+using LearnerCenter.API.Models.DTOs;
 
 namespace LearnerCenter.API.Interfaces
 {
