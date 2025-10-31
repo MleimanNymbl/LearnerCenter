@@ -5,9 +5,6 @@ using LearnerCenter.API.Models;
 
 namespace LearnerCenter.API.Repositories
 {
-    /// <summary>
-    /// Repository implementation for Campus data access operations
-    /// </summary>
     public class CampusRepository : ICampusRepository
     {
         private readonly LearnerCenterDbContext _context;
@@ -19,10 +16,6 @@ namespace LearnerCenter.API.Repositories
             _logger = logger;
         }
 
-        /// <summary>
-        /// Gets all active campuses from the database
-        /// </summary>
-        /// <returns>Collection of active Campus entities</returns>
         public async Task<IEnumerable<Campus>> GetAllActiveCampusesAsync()
         {
             try
@@ -43,12 +36,6 @@ namespace LearnerCenter.API.Repositories
                 throw;
             }
         }
-
-        /// <summary>
-        /// Gets a specific campus by ID
-        /// </summary>
-        /// <param name="campusId">The campus ID to search for</param>
-        /// <returns>Campus entity if found, null otherwise</returns>
         public async Task<Campus?> GetCampusByIdAsync(Guid campusId)
         {
             try

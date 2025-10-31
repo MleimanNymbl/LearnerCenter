@@ -3,9 +3,6 @@ using LearnerCenter.API.Interfaces;
 
 namespace LearnerCenter.API.Services
 {
-    /// <summary>
-    /// Service implementation for Campus business logic operations
-    /// </summary>
     public class CampusService : ICampusService
     {
         private readonly ICampusRepository _campusRepository;
@@ -17,10 +14,6 @@ namespace LearnerCenter.API.Services
             _logger = logger;
         }
 
-        /// <summary>
-        /// Gets all active campuses
-        /// </summary>
-        /// <returns>Collection of CampusDto objects</returns>
         public async Task<IEnumerable<CampusDto>> GetAllActiveCampusesAsync()
         {
             try
@@ -54,11 +47,6 @@ namespace LearnerCenter.API.Services
             }
         }
 
-        /// <summary>
-        /// Gets a specific campus by ID
-        /// </summary>
-        /// <param name="campusId">The campus ID to search for</param>
-        /// <returns>CampusDto if found, null otherwise</returns>
         public async Task<CampusDto?> GetCampusByIdAsync(Guid campusId)
         {
             try
