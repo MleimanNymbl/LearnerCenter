@@ -4,10 +4,10 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["LearnerCenter.API.csproj", "."]
-RUN dotnet restore "./LearnerCenter.API.csproj"
-COPY . .
-WORKDIR "/src/."
+COPY ["backend/LearnerCenter.API.csproj", "backend/"]
+RUN dotnet restore "backend/LearnerCenter.API.csproj"
+COPY backend/ backend/
+WORKDIR "/src/backend"
 RUN dotnet build "LearnerCenter.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
