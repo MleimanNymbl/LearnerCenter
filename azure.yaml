@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: learnercenter
+metadata:
+  template: learnercenter@0.0.1-beta
+services:
+  backend:
+    project: ./backend
+    language: dotnet
+    host: containerapp
+  frontend:
+    project: ./frontend
+    language: js
+    host: staticwebapp
+    dist: build
