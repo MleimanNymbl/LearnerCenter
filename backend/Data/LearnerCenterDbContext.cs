@@ -3,10 +3,6 @@ using LearnerCenter.API.Models;
 
 namespace LearnerCenter.API.Data
 {
-    /// <summary>
-    /// Entity Framework DbContext for the Learner Center application
-    /// Manages database connections and entity mappings
-    /// </summary>
     public class LearnerCenterDbContext : DbContext
     {
         public LearnerCenterDbContext(DbContextOptions<LearnerCenterDbContext> options) : base(options)
@@ -101,27 +97,27 @@ namespace LearnerCenter.API.Data
             // Add some constraints and default values
             modelBuilder.Entity<User>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("NOW()");
 
             modelBuilder.Entity<UserProfile>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("NOW()");
 
             modelBuilder.Entity<Campus>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("NOW()");
 
             modelBuilder.Entity<Course>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("NOW()");
 
             modelBuilder.Entity<Enrollment>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("NOW()");
 
             modelBuilder.Entity<Term>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("NOW()");
 
 
         }

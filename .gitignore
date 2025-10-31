@@ -10,6 +10,11 @@
 **/TestResults/
 **/.nuget/
 
+# Configuration files with secrets
+backend/appsettings.json
+backend/appsettings.Development.json
+backend/appsettings.Production.json
+
 # Node.js specific
 **/node_modules/
 **/npm-debug.log*
