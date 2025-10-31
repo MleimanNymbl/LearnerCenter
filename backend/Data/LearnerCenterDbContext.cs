@@ -97,27 +97,27 @@ namespace LearnerCenter.API.Data
             // Add some constraints and default values
             modelBuilder.Entity<User>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("NOW()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
             modelBuilder.Entity<UserProfile>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("NOW()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
             modelBuilder.Entity<Campus>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("NOW()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
             modelBuilder.Entity<Course>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("NOW()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
             modelBuilder.Entity<Enrollment>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("NOW()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
             modelBuilder.Entity<Term>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("NOW()");
+                .HasDefaultValueSql("GETUTCDATE()");
 
 
         }

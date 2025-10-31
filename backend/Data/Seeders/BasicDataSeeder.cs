@@ -54,7 +54,7 @@ namespace LearnerCenter.API.Data.Seeders
                     ZipCode = template.Zip,
                     PhoneNumber = $"({555 + i})-{123 + i:000}-{4567 + i:0000}",
                     Email = $"info@{template.Code.ToLower().Replace("-", "")}.edu",
-                    CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    CreatedDate = new DateTime(2024, 1, 1)
                 });
             }
             return campuses;
@@ -108,7 +108,7 @@ namespace LearnerCenter.API.Data.Seeders
                         ProgramName = template.Name,
                         Degree = template.Degree,
                         Description = template.Description,
-                        CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc)
+                        CreatedDate = new DateTime(2024, 1, 15)
                     });
                     enrollmentIndex++;
                 }
@@ -183,7 +183,7 @@ namespace LearnerCenter.API.Data.Seeders
                         CreditHours = creditHours,
                         Description = GenerateCourseDescription(courseName, enrollment.ProgramName),
                         EnrollmentId = enrollment.EnrollmentId,
-                        CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Utc)
+                        CreatedDate = new DateTime(2024, 1, 15)
                     });
                     courseIndex++;
                 }

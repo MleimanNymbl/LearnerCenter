@@ -6,11 +6,11 @@ using LearnerCenter.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure Entity Framework - PostgreSQL only
+// Configure Entity Framework
 builder.Services.AddDbContext<LearnerCenterDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connectionString);
+    options.UseSqlServer(connectionString);
 });
 
 // Add Controllers
@@ -71,19 +71,19 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Database setup on startup - PostgreSQL
+// Auto-migrate database on startup
 try
 {
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<LearnerCenterDbContext>();
     
-    Console.WriteLine("Setting up PostgreSQL database...");
-    await context.Database.EnsureCreatedAsync();
-    Console.WriteLine("PostgreSQL database setup completed successfully");
+    Console.WriteLine("Starting database migration...");
+    await context.Database.MigrateAsync();
+    Console.WriteLine("Database migration completed successfully");
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Database setup failed: {ex.Message}");
+    Console.WriteLine($"Migration failed: {ex.Message}");
     Console.WriteLine($"Stack trace: {ex.StackTrace}");
     // Don't fail startup, just log the error
 }
