@@ -99,7 +99,7 @@ catch (Exception ex)
     // Don't fail startup, just log the error
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline. 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
