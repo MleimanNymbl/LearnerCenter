@@ -112,6 +112,10 @@ app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
+// Add health check endpoint
+app.MapGet("/", () => "LearnerCenter API is running!");
+app.MapGet("/api/health", () => new { status = "healthy", timestamp = DateTime.UtcNow });
+
 // Map controllers
 app.MapControllers();
 
