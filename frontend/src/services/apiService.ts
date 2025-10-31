@@ -157,3 +157,21 @@ export const campusApi = {
     return response;
   },
 };
+
+// Enrollment API
+export const enrollmentApi = {
+  getAllEnrollments: async () => {
+    const response = await api.get<Enrollment[]>('/Enrollment');
+    return response;
+  },
+  
+  getEnrollmentById: async (enrollmentId: string) => {
+    const response = await api.get<Enrollment>(`/Enrollment/${enrollmentId}`);
+    return response;
+  },
+  
+  getEnrollmentsByCampus: async (campusId: string) => {
+    const response = await api.get<Enrollment[]>(`/Enrollment/campus/${campusId}`);
+    return response;
+  },
+};

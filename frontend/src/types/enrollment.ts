@@ -1,15 +1,21 @@
 // Enrollment-related types
-import { User } from './user';
-import { Course } from './course';
 
 export interface Enrollment {
-  id: number;
-  userId: number;
-  courseId: number;
-  user?: User;
-  course?: Course;
-  enrolledAt: string;
-  completedAt?: string;
-  progress: number; // percentage 0-100
+  enrollmentId: string;
+  name: string;
+  description: string;
+  programType: string;
+  durationWeeks: number;
+  cost: number;
   isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  
+  // Campus information
+  campusId: string;
+  campusName: string;
+  campusLocation: string;
+  
+  // Course count for this enrollment
+  courseCount: number;
 }

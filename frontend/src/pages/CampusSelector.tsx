@@ -11,12 +11,14 @@ import {
   Button,
   Divider,
   Alert,
-  CircularProgress,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { School, Person, LocationOn } from '@mui/icons-material';
+import { Person, LocationOn } from '@mui/icons-material';
 import { campusApi } from '../services/apiService';
 import { Campus } from '../types';
+import HeroBanner from '../components/HeroBanner';
+import CampusInfoBanner from '../components/CampusInfoBanner';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const CampusSelector: React.FC = () => {
   const [campuses, setCampuses] = useState<Campus[]>([]);
@@ -72,8 +74,8 @@ const CampusSelector: React.FC = () => {
       const selectedCampusData = campuses.find(c => c.campusId === selectedCampus);
       if (selectedCampusData) {
         localStorage.setItem('selectedCampus', JSON.stringify(selectedCampusData));
-        // Navigate to enrollment registration
-        navigate('/enrollment-registration');
+        // Navigate to enrollment registration with campus ID
+        navigate(`/enrollment-registration/${selectedCampusData.campusId}`);
       }
     }
   };
@@ -83,71 +85,15 @@ const CampusSelector: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <Container component="main" maxWidth="md">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            minHeight: '60vh',
-            justifyContent: 'center',
-          }}
-        >
-          <CircularProgress size={60} />
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Loading campuses...
-          </Typography>
-        </Box>
-      </Container>
-    );
+    return <LoadingSpinner size={60} />;
   }
 
   return (
     <>
-      {/* Hero Banner */}
-      <Box
-        sx={{
-          width: '100%',
-          height: 300,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1471&q=80)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            zIndex: 1,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            textAlign: 'center',
-            color: 'white',
-            zIndex: 2,
-            position: 'relative',
-          }}
-        >
-          <School sx={{ fontSize: 80, mb: 2, color: 'white' }} />
-          <Typography component="h1" variant="h2" gutterBottom fontWeight="bold">
-            Welcome to Learner Center
-          </Typography>
-          <Typography variant="h5" sx={{ opacity: 0.9 }}>
-            Your educational journey starts here
-          </Typography>
-        </Box>
-      </Box>
+      <HeroBanner 
+        title="Welcome to Learner Center"
+        subtitle="Your educational journey starts here"
+      />
 
       <Container component="main" maxWidth="md">
         <Box

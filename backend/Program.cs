@@ -37,6 +37,8 @@ builder.Services.AddCors(options =>
 // Register repository and service dependencies
 builder.Services.AddScoped<ICampusRepository, CampusRepository>();
 builder.Services.AddScoped<ICampusService, CampusService>();
+builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 
 // Add API documentation services
 builder.Services.AddEndpointsApiExplorer();

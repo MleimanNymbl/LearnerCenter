@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box } from '@mui/material';
 import SimpleHeader from './components/SimpleHeader';
-import CampusSelector from './components/CampusSelector';
-import EnrollmentRegistration from './components/EnrollmentRegistration';
+import CampusSelector from './pages/CampusSelector';
+import EnrollmentRegistration from './pages/EnrollmentRegistration';
 import Login from './components/Login';
 import SimpleDashboard from './components/SimpleDashboard';
 
@@ -29,19 +29,25 @@ function App() {
       <CssBaseline />
       <Router>
         <Box sx={{ flexGrow: 1 }}>
-          <SimpleHeader />
           <Routes>
-            {/* Campus selector - landing page */}
+            {/* Pages without header - campus and enrollment flow */}
             <Route path="/" element={<CampusSelector />} />
-            
-            {/* Enrollment registration page */}
             <Route path="/enrollment-registration" element={<EnrollmentRegistration />} />
+            <Route path="/enrollment-registration/:campusId" element={<EnrollmentRegistration />} />
             
-            {/* Login page */}
-            <Route path="/login" element={<Login />} />
-            
-            {/* Simple dashboard after login */}
-            <Route path="/dashboard" element={<SimpleDashboard />} />
+            {/* Pages with header - authenticated pages */}
+            <Route path="/login" element={
+              <>
+                <SimpleHeader />
+                <Login />
+              </>
+            } />
+            <Route path="/dashboard" element={
+              <>
+                <SimpleHeader />
+                <SimpleDashboard />
+              </>
+            } />
             
             {/* Catch all other routes - redirect to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
