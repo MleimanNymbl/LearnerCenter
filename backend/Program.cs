@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<LearnerCenterDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("Host="))
+    if (!string.IsNullOrEmpty(connectionString) && (connectionString.Contains("Host=") || connectionString.StartsWith("postgresql://")))
     {
         // PostgreSQL connection (production)
         options.UseNpgsql(connectionString);
