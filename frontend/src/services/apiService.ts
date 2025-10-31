@@ -51,6 +51,17 @@ export const usersApi = {
   
   deactivateUser: (id: number) =>
     api.patch<ApiResponse<User>>(`/users/${id}/deactivate`),
+
+  // New user registration endpoint
+  register: async (userData: any) => {
+    const response = await api.post('/User/register', userData);
+    return response;
+  },
+
+  checkUserExists: (username: string, email: string) =>
+    api.get<{ exists: boolean; usernameExists: boolean; emailExists: boolean }>('/User/exists', { 
+      params: { username, email } 
+    }),
 };
 
 // Courses API

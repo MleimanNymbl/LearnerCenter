@@ -19,11 +19,6 @@ namespace LearnerCenter.API.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Gets all enrollments for a specific campus
-        /// </summary>
-        /// <param name="campusId">The campus ID to filter enrollments</param>
-        /// <returns>List of enrollments for the specified campus</returns>
         [HttpGet("campus/{campusId}")]
         public async Task<ActionResult<IEnumerable<EnrollmentDto>>> GetEnrollmentsByCampus(Guid campusId)
         {
@@ -39,10 +34,6 @@ namespace LearnerCenter.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Gets all enrollments
-        /// </summary>
-        /// <returns>List of all enrollments</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EnrollmentDto>>> GetAllEnrollments()
         {
@@ -58,11 +49,6 @@ namespace LearnerCenter.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Gets a specific enrollment by ID
-        /// </summary>
-        /// <param name="enrollmentId">The enrollment ID</param>
-        /// <returns>The enrollment details</returns>
         [HttpGet("{enrollmentId}")]
         public async Task<ActionResult<EnrollmentDto>> GetEnrollmentById(Guid enrollmentId)
         {
@@ -82,11 +68,6 @@ namespace LearnerCenter.API.Controllers
             }
         }
 
-        /// <summary>
-        /// Gets all courses associated with a specific enrollment
-        /// </summary>
-        /// <param name="enrollmentId">The enrollment ID</param>
-        /// <returns>List of courses for the specified enrollment</returns>
         [HttpGet("{enrollmentId}/courses")]
         public async Task<ActionResult<IEnumerable<object>>> GetCoursesByEnrollment(Guid enrollmentId)
         {

@@ -5,6 +5,8 @@ import { CssBaseline, Box } from '@mui/material';
 import SimpleHeader from './components/SimpleHeader';
 import CampusSelector from './pages/CampusSelector';
 import EnrollmentRegistration from './pages/EnrollmentRegistration';
+import UserRegistration from './pages/UserRegistration';
+import RegistrationSuccess from './pages/RegistrationSuccess';
 import Login from './components/Login';
 import SimpleDashboard from './components/SimpleDashboard';
 
@@ -34,6 +36,8 @@ function App() {
             <Route path="/" element={<CampusSelector />} />
             <Route path="/enrollment-registration" element={<EnrollmentRegistration />} />
             <Route path="/enrollment-registration/:campusId" element={<EnrollmentRegistration />} />
+            <Route path="/user-registration" element={<UserRegistration />} />
+            <Route path="/registration-success" element={<RegistrationSuccess />} />
             
             {/* Pages with header - authenticated pages */}
             <Route path="/login" element={

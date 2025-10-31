@@ -95,8 +95,13 @@ const EnrollmentRegistration: React.FC = () => {
       const selectedEnrollmentData = enrollments.find(e => e.enrollmentId === selectedEnrollment);
       if (selectedEnrollmentData) {
         localStorage.setItem('selectedEnrollment', JSON.stringify(selectedEnrollmentData));
-        // Navigate to next step (user registration form or login)
-        navigate('/login');
+        // Navigate to user registration form
+        navigate('/user-registration', {
+          state: {
+            enrollmentId: selectedEnrollmentData.enrollmentId,
+            programName: selectedEnrollmentData.name
+          }
+        });
       }
     }
   };
