@@ -8,7 +8,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure Entity Framework
 builder.Services.AddDbContext<LearnerCenterDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("Host="))
+    {
+        // PostgreSQL connection (production)
+        options.UseNpgsql(connectionString);
+    }
+    else
+    {
+        // SQL Server connection (development)
+        options.UseSqlServer(connectionString ?? "");
+    }
+});
 
 // Add Controllers
 builder.Services.AddControllers();
@@ -26,7 +38,14 @@ builder.Services.AddCors(options =>
         }
         else
         {
-            policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+            // Allow production hosting domains
+            policy.SetIsOriginAllowed(origin => 
+                {
+                    var uri = new Uri(origin);
+                    return uri.Host.EndsWith(".vercel.app") ||
+                           uri.Host.EndsWith(".railway.app") ||
+                           uri.Host == "localhost";
+                })
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -60,6 +79,21 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// Auto-migrate database on startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<LearnerCenterDbContext>();
+    try
+    {
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        // Log error but don't crash the app
+        Console.WriteLine($"Migration failed: {ex.Message}");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
