@@ -80,20 +80,22 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Auto-migrate database on startup
-using (var scope = app.Services.CreateScope())
+// Auto-migrate database on startup (non-blocking)
+_ = Task.Run(async () =>
 {
-    var context = scope.ServiceProvider.GetRequiredService<LearnerCenterDbContext>();
     try
     {
-        context.Database.Migrate();
+        await Task.Delay(5000); // Wait 5 seconds for app to start
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<LearnerCenterDbContext>();
+        await context.Database.MigrateAsync();
+        Console.WriteLine("Database migration completed successfully");
     }
     catch (Exception ex)
     {
-        // Log error but don't crash the app
-        Console.WriteLine($"Migration failed: {ex.Message}");
+        Console.WriteLine($"Migration failed (non-blocking): {ex.Message}");
     }
-}
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
