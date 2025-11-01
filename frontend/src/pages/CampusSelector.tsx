@@ -17,7 +17,6 @@ import { Person, LocationOn } from '@mui/icons-material';
 import { campusApi } from '../services/apiService';
 import { Campus } from '../types';
 import HeroBanner from '../components/HeroBanner';
-import CampusInfoBanner from '../components/CampusInfoBanner';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const CampusSelector: React.FC = () => {
@@ -33,17 +32,6 @@ const CampusSelector: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Attempting to fetch campuses from:', 'http://localhost:5253/api/Campus');
-        
-        // Try a simple fetch first to test CORS
-        try {
-          const testResponse = await fetch('http://localhost:5253/api/Campus');
-          console.log('Direct fetch test status:', testResponse.status);
-          const testData = await testResponse.json();
-          console.log('Direct fetch test data:', testData);
-        } catch (testError) {
-          console.error('Direct fetch test failed:', testError);
-        }
         
         const response = await campusApi.getAllCampuses();
         console.log('Campus API response:', response);

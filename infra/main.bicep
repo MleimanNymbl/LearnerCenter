@@ -88,6 +88,15 @@ resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = if (deployDataba
       endIpAddress: '0.0.0.0'
     }
   }
+  
+  // Allow Container App outbound IP
+  resource containerAppFirewallRule 'firewallRules' = {
+    name: 'AllowContainerApp'
+    properties: {
+      startIpAddress: '20.161.234.241'
+      endIpAddress: '20.161.234.241'
+    }
+  }
 }
 
 // Create SQL Database (conditional)
@@ -174,7 +183,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       containers: [
         {
           name: 'backend'
-          image: 'mcr.microsoft.com/dotnet/aspnet:9.0'
+          image: '${containerRegistry.properties.loginServer}/learnercenter/backend:latest'
           resources: {
             cpu: json('0.25')
             memory: '0.5Gi'
@@ -190,7 +199,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
             }
             {
               name: 'ConnectionStrings__DefaultConnection'
-              value: deployDatabase ? '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=SqlConnectionString)' : ''
+              value: deployDatabase ? 'Server=tcp:sql-learnercenter-kp7ijvoutfzbo.database.windows.net,1433;Database=sqldb-learnercenter;User ID=sqladmin;Password=TempPassword123!;Encrypt=true;Connection Timeout=30;' : ''
             }
           ]
         }
