@@ -52,16 +52,13 @@ builder.Services.AddCors(options =>
         else
         {
             // Allow production hosting domains including Azure Static Web Apps
-            policy.SetIsOriginAllowed(origin => 
-                {
-                    var uri = new Uri(origin);
-                    return uri.Host.EndsWith(".azurestaticapps.net") ||
-                           uri.Host.EndsWith(".1.azurestaticapps.net") ||
-                           uri.Host == "localhost";
-                })
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials();
+            policy.WithOrigins(
+                "https://lemon-smoke-05044a110.3.azurestaticapps.net",
+                "https://lemon-smoke-05044a110-preview.centralus.3.azurestaticapps.net"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
         }
     });
 });
