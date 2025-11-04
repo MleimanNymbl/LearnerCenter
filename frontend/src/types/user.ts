@@ -9,6 +9,10 @@ export interface User {
   status: string;
   isActive: boolean;
   enrollmentId?: string;
+  // Extended properties for frontend use
+  role?: UserRole;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface UserProfile {
@@ -49,6 +53,19 @@ export interface UserRegistrationData {
   gender?: string;
   emergencyContactName?: string;
   emergencyContactPhone?: string;
+}
+
+// Separate type for demo payment data (not persisted)
+export interface PaymentData {
+  cardNumber: string;
+  expiryMonth: string;
+  expiryYear: string;
+  cvv: string;
+  cardHolderName: string;
+  billingAddress: string;
+  billingCity: string;
+  billingState: string;
+  billingZipCode: string;
 }
 
 export enum UserRole {

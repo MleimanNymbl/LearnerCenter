@@ -14,7 +14,7 @@ import {
   StepLabel
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { UserRegistrationData } from '../types/user';
+import { UserRegistrationData, PaymentData } from '../types/user';
 import { usersApi } from '../services/apiService';
 import { useUserAvailability } from '../hooks/useUserAvailability';
 import { validateStep } from '../utils/validation';
@@ -22,6 +22,7 @@ import HeroBanner from '../components/HeroBanner';
 import AccountInformationStep from '../components/AccountInformationStep';
 import PersonalInformationStep from '../components/PersonalInformationStep';
 import ContactDetailsStep from '../components/ContactDetailsStep';
+import { PaymentInformationStep } from '../components/payment';
 
 interface LocationState {
   enrollmentId: string;
@@ -35,6 +36,8 @@ const UserRegistration: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isValidatingPayment, setIsValidatingPayment] = useState(false);
+  const [paymentValidated, setPaymentValidated] = useState(false);
   
   const [formData, setFormData] = useState<UserRegistrationData>({
     username: '',
@@ -55,6 +58,19 @@ const UserRegistration: React.FC = () => {
     emergencyContactPhone: ''
   });
 
+  // Separate state for payment data (demo only, not persisted)
+  const [paymentData, setPaymentData] = useState<PaymentData>({
+    cardNumber: '',
+    expiryMonth: '',
+    expiryYear: '',
+    cvv: '',
+    cardHolderName: '',
+    billingAddress: '',
+    billingCity: '',
+    billingState: '',
+    billingZipCode: ''
+  });
+
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [activeStep, setActiveStep] = useState(0);
 
@@ -64,7 +80,7 @@ const UserRegistration: React.FC = () => {
     formData.email
   );
 
-  const steps = ['Account Information', 'Personal Information', 'Contact Details'];
+  const steps = ['Account Information', 'Personal Information', 'Contact Details', 'Payment Information'];
 
   useEffect(() => {
     if (!enrollmentId || !programName) {
@@ -92,15 +108,51 @@ const UserRegistration: React.FC = () => {
     }
   };
 
-  const handleNext = () => {
-    const stepErrors = validateStep(activeStep, formData, availabilityResults);
+  const handlePaymentInputChange = (field: keyof PaymentData, value: string) => {
+    setPaymentData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+
+    // Clear error for this field when user starts typing
+    if (formErrors[field]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
+  };
+
+  const handleNext = async () => {
+    const stepErrors = validateStep(activeStep, formData, availabilityResults, paymentData);
     setFormErrors(stepErrors);
     
     if (Object.keys(stepErrors).length === 0) {
-      if (activeStep < steps.length - 1) {
+      if (activeStep === 3) {
+        // Payment step - simulate payment validation
+        setIsValidatingPayment(true);
+        setError(null);
+        
+        try {
+          // Simulate API delay for payment validation
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Additional validation delay for "processing"
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          setPaymentValidated(true);
+          setIsValidatingPayment(false);
+          
+          // Short delay to show success message
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          handleSubmit();
+        } catch (error) {
+          setIsValidatingPayment(false);
+          setError('Payment validation failed. Please check your card information.');
+        }
+      } else if (activeStep < steps.length - 1) {
         setActiveStep(activeStep + 1);
-      } else {
-        handleSubmit();
       }
     }
   };
@@ -110,7 +162,7 @@ const UserRegistration: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    // Final validation
+    // Final validation (skip payment validation as it's already done)
     const finalErrors = validateStep(2, formData, availabilityResults);
     setFormErrors(finalErrors);
     
@@ -120,6 +172,8 @@ const UserRegistration: React.FC = () => {
     setError(null);
 
     try {
+      // NOTE: Payment data is NOT included in the API call - it's demo only
+      // Only user registration and profile data is sent to the backend
       const registrationData = {
         username: formData.username,
         email: formData.email,
@@ -211,6 +265,28 @@ const UserRegistration: React.FC = () => {
             onInputChange={handleInputChange}
           />
         );
+      case 3:
+        return (
+          <PaymentInformationStep
+            paymentData={paymentData}
+            paymentErrors={formErrors}
+            onInputChange={(field, value) => handlePaymentInputChange(field, value)}
+            isValidating={isValidatingPayment}
+            validationSuccess={paymentValidated}
+            userProfile={{
+              userProfileId: '',
+              userId: '',
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              address: formData.address,
+              city: formData.city,
+              state: formData.state,
+              zipCode: formData.zipCode,
+              phoneNumber: formData.phoneNumber,
+              createdDate: '',
+            }}
+          />
+        );
       default:
         return null;
     }
@@ -227,13 +303,15 @@ const UserRegistration: React.FC = () => {
         <Card elevation={3}>
           <CardContent sx={{ p: 4 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-              <Button
-                startIcon={<ArrowBack />}
-                onClick={() => navigate('/enrollment-registration')}
-                sx={{ mr: 2 }}
-              >
-                Back to Program Selection
-              </Button>
+              {activeStep === 0 && (
+                <Button
+                  startIcon={<ArrowBack />}
+                  onClick={() => navigate('/enrollment-registration')}
+                  sx={{ mr: 2 }}
+                >
+                  Back to Program Selection
+                </Button>
+              )}
               <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
                 User Registration
               </Typography>
@@ -261,7 +339,7 @@ const UserRegistration: React.FC = () => {
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
               <Button
-                disabled={activeStep === 0 || loading}
+                disabled={activeStep === 0 || loading || isValidatingPayment}
                 onClick={handleBack}
                 variant="outlined"
               >
@@ -270,10 +348,10 @@ const UserRegistration: React.FC = () => {
               <Button
                 onClick={handleNext}
                 variant="contained"
-                disabled={loading}
+                disabled={loading || isValidatingPayment}
                 sx={{ minWidth: 120 }}
               >
-                {activeStep === steps.length - 1 ? 'Register' : 'Next'}
+                {isValidatingPayment ? 'Processing...' : activeStep === steps.length - 1 ? 'Complete Registration' : 'Next'}
               </Button>
             </Box>
           </CardContent>
