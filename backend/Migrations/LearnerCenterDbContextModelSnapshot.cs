@@ -3,8 +3,8 @@ using System;
 using LearnerCenter.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -18,62 +18,61 @@ namespace LearnerCenter.API.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("LearnerCenter.API.Models.Campus", b =>
                 {
                     b.Property<Guid>("CampusId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Address")
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("CampusCode")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("character varying(10)");
 
                     b.Property<string>("CampusName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("State")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("ZipCode")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("character varying(10)");
 
                     b.HasKey("CampusId");
 
                     b.HasIndex("CampusCode")
-                        .IsUnique()
-                        .HasFilter("[CampusCode] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Campuses");
 
@@ -85,7 +84,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "SU-MAIN",
                             CampusName = "State University Main Campus",
                             City = "Springfield",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@sumain.edu",
                             IsActive = true,
                             PhoneNumber = "(555)-123-4567",
@@ -99,7 +98,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "CC-DOWN",
                             CampusName = "Community College Downtown",
                             City = "Springfield",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@ccdown.edu",
                             IsActive = true,
                             PhoneNumber = "(556)-124-4568",
@@ -113,7 +112,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "TI-NORTH",
                             CampusName = "Technical Institute North",
                             City = "Rockford",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@tinorth.edu",
                             IsActive = true,
                             PhoneNumber = "(557)-125-4569",
@@ -127,7 +126,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "LAC-MAIN",
                             CampusName = "Liberal Arts College",
                             City = "Peoria",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@lacmain.edu",
                             IsActive = true,
                             PhoneNumber = "(558)-126-4570",
@@ -141,7 +140,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "BSC-CENT",
                             CampusName = "Business School Central",
                             City = "Chicago",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@bsccent.edu",
                             IsActive = true,
                             PhoneNumber = "(559)-127-4571",
@@ -155,7 +154,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "SCC-MAIN",
                             CampusName = "Sunshine Community College",
                             City = "Miami",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@sccmain.edu",
                             IsActive = true,
                             PhoneNumber = "(560)-128-4572",
@@ -169,7 +168,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "MVTI-MAIN",
                             CampusName = "Mountain View Technical Institute",
                             City = "Denver",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@mvtimain.edu",
                             IsActive = true,
                             PhoneNumber = "(561)-129-4573",
@@ -183,7 +182,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "LSU-MAIN",
                             CampusName = "Lone Star University",
                             City = "Austin",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@lsumain.edu",
                             IsActive = true,
                             PhoneNumber = "(562)-130-4574",
@@ -197,7 +196,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "GGC-MAIN",
                             CampusName = "Golden Gate College",
                             City = "San Francisco",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@ggcmain.edu",
                             IsActive = true,
                             PhoneNumber = "(563)-131-4575",
@@ -211,7 +210,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "ESI-MAIN",
                             CampusName = "Empire State Institute",
                             City = "New York",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@esimain.edu",
                             IsActive = true,
                             PhoneNumber = "(564)-132-4576",
@@ -225,7 +224,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "DIU-MAIN",
                             CampusName = "Desert Innovation University",
                             City = "Phoenix",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@diumain.edu",
                             IsActive = true,
                             PhoneNumber = "(565)-133-4577",
@@ -239,7 +238,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "GLTC-MAIN",
                             CampusName = "Great Lakes Technical College",
                             City = "Detroit",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@gltcmain.edu",
                             IsActive = true,
                             PhoneNumber = "(566)-134-4578",
@@ -253,7 +252,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "ECU-MAIN",
                             CampusName = "Emerald City University",
                             City = "Seattle",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@ecumain.edu",
                             IsActive = true,
                             PhoneNumber = "(567)-135-4579",
@@ -267,7 +266,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "BRCC-MAIN",
                             CampusName = "Blue Ridge Community College",
                             City = "Richmond",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@brccmain.edu",
                             IsActive = true,
                             PhoneNumber = "(568)-136-4580",
@@ -281,7 +280,7 @@ namespace LearnerCenter.API.Migrations
                             CampusCode = "PSI-MAIN",
                             CampusName = "Peach State Institute",
                             City = "Atlanta",
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "info@psimain.edu",
                             IsActive = true,
                             PhoneNumber = "(569)-137-4581",
@@ -294,35 +293,35 @@ namespace LearnerCenter.API.Migrations
                 {
                     b.Property<Guid>("CourseId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CourseCode")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("CourseName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.Property<int>("CreditHours")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<Guid>("EnrollmentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.HasKey("CourseId");
 
@@ -339,7 +338,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000001-6f63-7275-7365-202001000000"),
                             CourseCode = "CS101",
                             CourseName = "Introduction to Programming",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level introduction to programming skills development",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -350,7 +349,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000002-6f63-7275-7365-202002000000"),
                             CourseCode = "CS102",
                             CourseName = "Data Structures",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with data structures techniques",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -361,7 +360,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000003-6f63-7275-7365-202003000000"),
                             CourseCode = "CS201",
                             CourseName = "Algorithms",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of algorithms in computer science",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -372,7 +371,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000004-6f63-7275-7365-202004000000"),
                             CourseCode = "CS301",
                             CourseName = "Software Engineering",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in software engineering",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -383,7 +382,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000005-6f63-7275-7365-202005000000"),
                             CourseCode = "CS401",
                             CourseName = "Database Systems",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level database systems skills development",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -394,7 +393,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000006-6f63-7275-7365-202006000000"),
                             CourseCode = "CS501",
                             CourseName = "Web Development",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in web development",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -405,7 +404,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000007-6f63-7275-7365-202007000000"),
                             CourseCode = "MATH150",
                             CourseName = "Calculus I",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with calculus i techniques",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -416,7 +415,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000008-6f63-7275-7365-202008000000"),
                             CourseCode = "MATH250",
                             CourseName = "Discrete Mathematics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of discrete mathematics in computer science",
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
@@ -427,7 +426,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000009-6f63-7275-7365-202009000000"),
                             CourseCode = "ENGR101",
                             CourseName = "Engineering Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of engineering fundamentals in engineering",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -438,7 +437,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000000a-6f63-7275-7365-20200a000000"),
                             CourseCode = "PHYS210",
                             CourseName = "Physics for Engineers I",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with physics for engineers i techniques",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -449,7 +448,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000000b-6f63-7275-7365-20200b000000"),
                             CourseCode = "MATH170",
                             CourseName = "Calculus for Engineers",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with calculus for engineers techniques",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -460,7 +459,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000000c-6f63-7275-7365-20200c000000"),
                             CourseCode = "CHEM110",
                             CourseName = "General Chemistry",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of general chemistry in engineering",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -471,7 +470,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000000d-6f63-7275-7365-20200d000000"),
                             CourseCode = "ENGR201",
                             CourseName = "Statics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of statics",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -482,7 +481,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000000e-6f63-7275-7365-20200e000000"),
                             CourseCode = "ENGR301",
                             CourseName = "Thermodynamics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level thermodynamics skills development",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -493,7 +492,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000000f-6f63-7275-7365-20200f000000"),
                             CourseCode = "ENGR401",
                             CourseName = "Design Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with design project techniques",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -504,7 +503,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000010-6f63-7275-7365-202010000000"),
                             CourseCode = "COMM101",
                             CourseName = "Technical Communication",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in technical communication",
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
@@ -515,7 +514,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000011-6f63-7275-7365-202011000000"),
                             CourseCode = "BUS101",
                             CourseName = "Introduction to Business",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of introduction to business in business administration",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -526,7 +525,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000012-6f63-7275-7365-202012000000"),
                             CourseCode = "ACC110",
                             CourseName = "Principles of Accounting",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of principles of accounting",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -537,7 +536,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000013-6f63-7275-7365-202013000000"),
                             CourseCode = "ECON101",
                             CourseName = "Microeconomics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in microeconomics",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -548,7 +547,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000014-6f63-7275-7365-202014000000"),
                             CourseCode = "MGMT201",
                             CourseName = "Management Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of management principles in business administration",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -559,7 +558,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000015-6f63-7275-7365-202015000000"),
                             CourseCode = "MKT101",
                             CourseName = "Marketing Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level marketing fundamentals skills development",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -570,7 +569,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000016-6f63-7275-7365-202016000000"),
                             CourseCode = "FIN201",
                             CourseName = "Business Finance",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of business finance in business administration",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -581,7 +580,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000017-6f63-7275-7365-202017000000"),
                             CourseCode = "BUS301",
                             CourseName = "Business Ethics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of business ethics",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -592,7 +591,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000018-6f63-7275-7365-202018000000"),
                             CourseCode = "STAT201",
                             CourseName = "Business Statistics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of business statistics in business administration",
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
@@ -603,7 +602,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000019-6f63-7275-7365-202019000000"),
                             CourseCode = "NUR100",
                             CourseName = "Introduction to Nursing",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level introduction to nursing skills development",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -614,7 +613,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000001a-6f63-7275-7365-20201a000000"),
                             CourseCode = "BIO201",
                             CourseName = "Anatomy & Physiology I",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of anatomy & physiology i",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -625,7 +624,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000001b-6f63-7275-7365-20201b000000"),
                             CourseCode = "BIO202",
                             CourseName = "Anatomy & Physiology II",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with anatomy & physiology ii techniques",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -636,7 +635,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000001c-6f63-7275-7365-20201c000000"),
                             CourseCode = "NUR201",
                             CourseName = "Pharmacology",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of pharmacology",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -647,7 +646,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000001d-6f63-7275-7365-20201d000000"),
                             CourseCode = "NUR301",
                             CourseName = "Clinical Nursing I",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 5,
                             Description = "Comprehensive study of clinical nursing i in nursing",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -658,7 +657,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000001e-6f63-7275-7365-20201e000000"),
                             CourseCode = "NUR302",
                             CourseName = "Clinical Nursing II",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 5,
                             Description = "Professional-level clinical nursing ii skills development",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -669,7 +668,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000001f-6f63-7275-7365-20201f000000"),
                             CourseCode = "PSY101",
                             CourseName = "Introduction to Psychology",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of introduction to psychology in nursing",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -680,7 +679,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000020-6f63-7275-7365-202020000000"),
                             CourseCode = "NUR401",
                             CourseName = "Nursing Leadership",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of nursing leadership in nursing",
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
@@ -691,7 +690,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000021-6f63-7275-7365-202021000000"),
                             CourseCode = "CYB101",
                             CourseName = "Introduction to Cybersecurity",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of introduction to cybersecurity in cybersecurity",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -702,7 +701,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000022-6f63-7275-7365-202022000000"),
                             CourseCode = "CYB201",
                             CourseName = "Network Security",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with network security techniques",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -713,7 +712,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000023-6f63-7275-7365-202023000000"),
                             CourseCode = "CYB301",
                             CourseName = "Ethical Hacking",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of ethical hacking in cybersecurity",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -724,7 +723,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000024-6f63-7275-7365-202024000000"),
                             CourseCode = "CYB401",
                             CourseName = "Digital Forensics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard digital forensics practices and procedures",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -735,7 +734,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000025-6f63-7275-7365-202025000000"),
                             CourseCode = "CS101",
                             CourseName = "Programming Basics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Industry-standard programming basics practices and procedures",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -746,7 +745,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000026-6f63-7275-7365-202026000000"),
                             CourseCode = "NET201",
                             CourseName = "Network Administration",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of network administration",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -757,7 +756,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000027-6f63-7275-7365-202027000000"),
                             CourseCode = "CYB501",
                             CourseName = "Incident Response",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of incident response",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -768,7 +767,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000028-6f63-7275-7365-202028000000"),
                             CourseCode = "LAW301",
                             CourseName = "Cyber Law",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with cyber law techniques",
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
@@ -779,7 +778,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000029-6f63-7275-7365-202029000000"),
                             CourseCode = "MKT150",
                             CourseName = "Digital Marketing Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of digital marketing fundamentals in digital marketing",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -790,7 +789,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000002a-6f63-7275-7365-20202a000000"),
                             CourseCode = "MKT250",
                             CourseName = "Social Media Marketing",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of social media marketing",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -801,7 +800,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000002b-6f63-7275-7365-20202b000000"),
                             CourseCode = "MKT350",
                             CourseName = "Content Marketing",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of content marketing in digital marketing",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -812,7 +811,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000002c-6f63-7275-7365-20202c000000"),
                             CourseCode = "WEB101",
                             CourseName = "Web Analytics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of web analytics",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -823,7 +822,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000002d-6f63-7275-7365-20202d000000"),
                             CourseCode = "GD101",
                             CourseName = "Graphic Design Basics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level graphic design basics skills development",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -834,7 +833,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000002e-6f63-7275-7365-20202e000000"),
                             CourseCode = "MKT450",
                             CourseName = "Email Marketing",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with email marketing techniques",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -845,7 +844,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000002f-6f63-7275-7365-20202f000000"),
                             CourseCode = "BUS201",
                             CourseName = "Consumer Behavior",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of consumer behavior",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -856,7 +855,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000030-6f63-7275-7365-202030000000"),
                             CourseCode = "MKT501",
                             CourseName = "Marketing Strategy",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in marketing strategy",
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
@@ -867,7 +866,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000031-6f63-7275-7365-202031000000"),
                             CourseCode = "AUTO101",
                             CourseName = "Automotive Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard automotive fundamentals practices and procedures",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -878,7 +877,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000032-6f63-7275-7365-202032000000"),
                             CourseCode = "AUTO201",
                             CourseName = "Engine Systems",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 5,
                             Description = "Hands-on experience with engine systems techniques",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -889,7 +888,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000033-6f63-7275-7365-202033000000"),
                             CourseCode = "AUTO301",
                             CourseName = "Transmission Systems",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level transmission systems skills development",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -900,7 +899,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000034-6f63-7275-7365-202034000000"),
                             CourseCode = "AUTO401",
                             CourseName = "Electrical Systems",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of electrical systems in automotive technology",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -911,7 +910,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000035-6f63-7275-7365-202035000000"),
                             CourseCode = "AUTO501",
                             CourseName = "Brake Systems",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard brake systems practices and procedures",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -922,7 +921,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000036-6f63-7275-7365-202036000000"),
                             CourseCode = "AUTO601",
                             CourseName = "Suspension Systems",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard suspension systems practices and procedures",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -933,7 +932,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000037-6f63-7275-7365-202037000000"),
                             CourseCode = "SHOP101",
                             CourseName = "Tool Safety",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 2,
                             Description = "Advanced concepts and practical applications in tool safety",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -944,7 +943,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000038-6f63-7275-7365-202038000000"),
                             CourseCode = "AUTO701",
                             CourseName = "Diagnostic Technology",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level diagnostic technology skills development",
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
@@ -955,7 +954,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000039-6f63-7275-7365-202039000000"),
                             CourseCode = "CUL101",
                             CourseName = "Culinary Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of culinary fundamentals in culinary arts",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -966,7 +965,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000003a-6f63-7275-7365-20203a000000"),
                             CourseCode = "CUL201",
                             CourseName = "Baking & Pastry",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of baking & pastry in culinary arts",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -977,7 +976,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000003b-6f63-7275-7365-20203b000000"),
                             CourseCode = "CUL301",
                             CourseName = "Food Safety & Sanitation",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of food safety & sanitation",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -988,7 +987,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000003c-6f63-7275-7365-20203c000000"),
                             CourseCode = "CUL401",
                             CourseName = "Menu Planning",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in menu planning",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -999,7 +998,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000003d-6f63-7275-7365-20203d000000"),
                             CourseCode = "CUL501",
                             CourseName = "International Cuisine",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level international cuisine skills development",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -1010,7 +1009,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000003e-6f63-7275-7365-20203e000000"),
                             CourseCode = "BUS201",
                             CourseName = "Restaurant Management",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of restaurant management in culinary arts",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -1021,7 +1020,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000003f-6f63-7275-7365-20203f000000"),
                             CourseCode = "NUT101",
                             CourseName = "Nutrition Basics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of nutrition basics in culinary arts",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -1032,7 +1031,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000040-6f63-7275-7365-202040000000"),
                             CourseCode = "CUL601",
                             CourseName = "Advanced Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 5,
                             Description = "Advanced concepts and practical applications in advanced techniques",
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
@@ -1043,7 +1042,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000041-6f63-7275-7365-202041000000"),
                             CourseCode = "GD101",
                             CourseName = "Design Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with design fundamentals techniques",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1054,7 +1053,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000042-6f63-7275-7365-202042000000"),
                             CourseCode = "GD201",
                             CourseName = "Typography",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with typography techniques",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1065,7 +1064,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000043-6f63-7275-7365-202043000000"),
                             CourseCode = "GD301",
                             CourseName = "Digital Design Software",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard digital design software practices and procedures",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1076,7 +1075,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000044-6f63-7275-7365-202044000000"),
                             CourseCode = "GD401",
                             CourseName = "Brand Identity",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level brand identity skills development",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1087,7 +1086,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000045-6f63-7275-7365-202045000000"),
                             CourseCode = "ART101",
                             CourseName = "Drawing Basics",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level drawing basics skills development",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1098,7 +1097,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000046-6f63-7275-7365-202046000000"),
                             CourseCode = "GD501",
                             CourseName = "Web Design",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level web design skills development",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1109,7 +1108,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000047-6f63-7275-7365-202047000000"),
                             CourseCode = "GD601",
                             CourseName = "Portfolio Development",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in portfolio development",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1120,7 +1119,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000048-6f63-7275-7365-202048000000"),
                             CourseCode = "BUS301",
                             CourseName = "Design Business",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with design business techniques",
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
@@ -1131,7 +1130,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000049-6f63-7275-7365-202049000000"),
                             CourseCode = "WEB101",
                             CourseName = "HTML & CSS Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Industry-standard html & css fundamentals practices and procedures",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1142,7 +1141,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000004a-6f63-7275-7365-20204a000000"),
                             CourseCode = "WEB201",
                             CourseName = "JavaScript Programming",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with javascript programming techniques",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1153,7 +1152,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000004b-6f63-7275-7365-20204b000000"),
                             CourseCode = "WEB301",
                             CourseName = "Backend Development",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of backend development in web development",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1164,7 +1163,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000004c-6f63-7275-7365-20204c000000"),
                             CourseCode = "WEB401",
                             CourseName = "Database Integration",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of database integration",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1175,7 +1174,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000004d-6f63-7275-7365-20204d000000"),
                             CourseCode = "WEB501",
                             CourseName = "Framework Development",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard framework development practices and procedures",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1186,7 +1185,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000004e-6f63-7275-7365-20204e000000"),
                             CourseCode = "WEB601",
                             CourseName = "Mobile Development",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of mobile development in web development",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1197,7 +1196,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000004f-6f63-7275-7365-20204f000000"),
                             CourseCode = "CS201",
                             CourseName = "Version Control",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 2,
                             Description = "Advanced concepts and practical applications in version control",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1208,7 +1207,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000050-6f63-7275-7365-202050000000"),
                             CourseCode = "WEB701",
                             CourseName = "Deployment & DevOps",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in deployment & devops",
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
@@ -1219,7 +1218,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000051-6f63-7275-7365-202051000000"),
                             CourseCode = "CRJU101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of program fundamentals in criminal justice",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1230,7 +1229,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000052-6f63-7275-7365-202052000000"),
                             CourseCode = "CRJU102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in basic principles",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1241,7 +1240,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000053-6f63-7275-7365-202053000000"),
                             CourseCode = "CRJU201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with intermediate concepts techniques",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1252,7 +1251,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000054-6f63-7275-7365-202054000000"),
                             CourseCode = "CRJU202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of advanced theory",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1263,7 +1262,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000055-6f63-7275-7365-202055000000"),
                             CourseCode = "CRJU301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of practical applications in criminal justice",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1274,7 +1273,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000056-6f63-7275-7365-202056000000"),
                             CourseCode = "CRJU302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard specialized techniques practices and procedures",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1285,7 +1284,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000057-6f63-7275-7365-202057000000"),
                             CourseCode = "CRJU401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of capstone project in criminal justice",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1296,7 +1295,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000058-6f63-7275-7365-202058000000"),
                             CourseCode = "CRJU402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of professional practice in criminal justice",
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
@@ -1307,7 +1306,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000059-6f63-7275-7365-202059000000"),
                             CourseCode = "ECE101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in program fundamentals",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1318,7 +1317,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000005a-6f63-7275-7365-20205a000000"),
                             CourseCode = "ECE102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in basic principles",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1329,7 +1328,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000005b-6f63-7275-7365-20205b000000"),
                             CourseCode = "ECE201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level intermediate concepts skills development",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1340,7 +1339,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000005c-6f63-7275-7365-20205c000000"),
                             CourseCode = "ECE202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level advanced theory skills development",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1351,7 +1350,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000005d-6f63-7275-7365-20205d000000"),
                             CourseCode = "ECE301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of practical applications in early childhood education",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1362,7 +1361,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000005e-6f63-7275-7365-20205e000000"),
                             CourseCode = "ECE302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of specialized techniques in early childhood education",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1373,7 +1372,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000005f-6f63-7275-7365-20205f000000"),
                             CourseCode = "ECE401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard capstone project practices and procedures",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1384,7 +1383,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000060-6f63-7275-7365-202060000000"),
                             CourseCode = "ECE402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Industry-standard professional practice practices and procedures",
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
@@ -1395,7 +1394,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000061-6f63-7275-7365-202061000000"),
                             CourseCode = "HVTE101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in program fundamentals",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1406,7 +1405,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000062-6f63-7275-7365-202062000000"),
                             CourseCode = "HVTE102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard basic principles practices and procedures",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1417,7 +1416,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000063-6f63-7275-7365-202063000000"),
                             CourseCode = "HVTE201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard intermediate concepts practices and procedures",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1428,7 +1427,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000064-6f63-7275-7365-202064000000"),
                             CourseCode = "HVTE202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in advanced theory",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1439,7 +1438,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000065-6f63-7275-7365-202065000000"),
                             CourseCode = "HVTE301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with practical applications techniques",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1450,7 +1449,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000066-6f63-7275-7365-202066000000"),
                             CourseCode = "HVTE302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with specialized techniques techniques",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1461,7 +1460,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000067-6f63-7275-7365-202067000000"),
                             CourseCode = "HVTE401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with capstone project techniques",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1472,7 +1471,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000068-6f63-7275-7365-202068000000"),
                             CourseCode = "HVTE402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in professional practice",
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
@@ -1483,7 +1482,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000069-6f63-7275-7365-202069000000"),
                             CourseCode = "PTA101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in program fundamentals",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1494,7 +1493,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000006a-6f63-7275-7365-20206a000000"),
                             CourseCode = "PTA102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in basic principles",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1505,7 +1504,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000006b-6f63-7275-7365-20206b000000"),
                             CourseCode = "PTA201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of intermediate concepts in physical therapy assistant",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1516,7 +1515,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000006c-6f63-7275-7365-20206c000000"),
                             CourseCode = "PTA202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in advanced theory",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1527,7 +1526,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000006d-6f63-7275-7365-20206d000000"),
                             CourseCode = "PTA301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard practical applications practices and procedures",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1538,7 +1537,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000006e-6f63-7275-7365-20206e000000"),
                             CourseCode = "PTA302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard specialized techniques practices and procedures",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1549,7 +1548,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000006f-6f63-7275-7365-20206f000000"),
                             CourseCode = "PTA401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level capstone project skills development",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1560,7 +1559,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000070-6f63-7275-7365-202070000000"),
                             CourseCode = "PTA402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Comprehensive study of professional practice in physical therapy assistant",
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
@@ -1571,7 +1570,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000071-6f63-7275-7365-202071000000"),
                             CourseCode = "VETE101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Industry-standard program fundamentals practices and procedures",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1582,7 +1581,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000072-6f63-7275-7365-202072000000"),
                             CourseCode = "VETE102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in basic principles",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1593,7 +1592,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000073-6f63-7275-7365-202073000000"),
                             CourseCode = "VETE201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in intermediate concepts",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1604,7 +1603,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000074-6f63-7275-7365-202074000000"),
                             CourseCode = "VETE202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with advanced theory techniques",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1615,7 +1614,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000075-6f63-7275-7365-202075000000"),
                             CourseCode = "VETE301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with practical applications techniques",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1626,7 +1625,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000076-6f63-7275-7365-202076000000"),
                             CourseCode = "VETE302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level specialized techniques skills development",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1637,7 +1636,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000077-6f63-7275-7365-202077000000"),
                             CourseCode = "VETE401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of capstone project in veterinary technology",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1648,7 +1647,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000078-6f63-7275-7365-202078000000"),
                             CourseCode = "VETE402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with professional practice techniques",
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
@@ -1659,7 +1658,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000079-6f63-7275-7365-202079000000"),
                             CourseCode = "WETE101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of program fundamentals",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1670,7 +1669,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000007a-6f63-7275-7365-20207a000000"),
                             CourseCode = "WETE102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard basic principles practices and procedures",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1681,7 +1680,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000007b-6f63-7275-7365-20207b000000"),
                             CourseCode = "WETE201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of intermediate concepts",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1692,7 +1691,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000007c-6f63-7275-7365-20207c000000"),
                             CourseCode = "WETE202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of advanced theory",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1703,7 +1702,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000007d-6f63-7275-7365-20207d000000"),
                             CourseCode = "WETE301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard practical applications practices and procedures",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1714,7 +1713,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000007e-6f63-7275-7365-20207e000000"),
                             CourseCode = "WETE302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of specialized techniques",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1725,7 +1724,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000007f-6f63-7275-7365-20207f000000"),
                             CourseCode = "WETE401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with capstone project techniques",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1736,7 +1735,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000080-6f63-7275-7365-202080000000"),
                             CourseCode = "WETE402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Industry-standard professional practice practices and procedures",
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
@@ -1747,7 +1746,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000081-6f63-7275-7365-202081000000"),
                             CourseCode = "DEHY101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level program fundamentals skills development",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1758,7 +1757,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000082-6f63-7275-7365-202082000000"),
                             CourseCode = "DEHY102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of basic principles in dental hygiene",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1769,7 +1768,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000083-6f63-7275-7365-202083000000"),
                             CourseCode = "DEHY201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of intermediate concepts in dental hygiene",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1780,7 +1779,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000084-6f63-7275-7365-202084000000"),
                             CourseCode = "DEHY202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of advanced theory in dental hygiene",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1791,7 +1790,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000085-6f63-7275-7365-202085000000"),
                             CourseCode = "DEHY301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in practical applications",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1802,7 +1801,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000086-6f63-7275-7365-202086000000"),
                             CourseCode = "DEHY302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard specialized techniques practices and procedures",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1813,7 +1812,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000087-6f63-7275-7365-202087000000"),
                             CourseCode = "DEHY401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level capstone project skills development",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1824,7 +1823,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000088-6f63-7275-7365-202088000000"),
                             CourseCode = "DEHY402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of professional practice",
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
@@ -1835,7 +1834,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000089-6f63-7275-7365-202089000000"),
                             CourseCode = "FADE101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with program fundamentals techniques",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1846,7 +1845,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000008a-6f63-7275-7365-20208a000000"),
                             CourseCode = "FADE102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of basic principles",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1857,7 +1856,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000008b-6f63-7275-7365-20208b000000"),
                             CourseCode = "FADE201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of intermediate concepts in fashion design",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1868,7 +1867,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000008c-6f63-7275-7365-20208c000000"),
                             CourseCode = "FADE202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard advanced theory practices and procedures",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1879,7 +1878,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000008d-6f63-7275-7365-20208d000000"),
                             CourseCode = "FADE301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard practical applications practices and procedures",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1890,7 +1889,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000008e-6f63-7275-7365-20208e000000"),
                             CourseCode = "FADE302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard specialized techniques practices and procedures",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1901,7 +1900,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000008f-6f63-7275-7365-20208f000000"),
                             CourseCode = "FADE401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in capstone project",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1912,7 +1911,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000090-6f63-7275-7365-202090000000"),
                             CourseCode = "FADE402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of professional practice",
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
@@ -1923,7 +1922,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000091-6f63-7275-7365-202091000000"),
                             CourseCode = "ENSC101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with program fundamentals techniques",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -1934,7 +1933,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000092-6f63-7275-7365-202092000000"),
                             CourseCode = "ENSC102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with basic principles techniques",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -1945,7 +1944,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000093-6f63-7275-7365-202093000000"),
                             CourseCode = "ENSC201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard intermediate concepts practices and procedures",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -1956,7 +1955,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000094-6f63-7275-7365-202094000000"),
                             CourseCode = "ENSC202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level advanced theory skills development",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -1967,7 +1966,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000095-6f63-7275-7365-202095000000"),
                             CourseCode = "ENSC301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level practical applications skills development",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -1978,7 +1977,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000096-6f63-7275-7365-202096000000"),
                             CourseCode = "ENSC302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in specialized techniques",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -1989,7 +1988,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000097-6f63-7275-7365-202097000000"),
                             CourseCode = "ENSC401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of capstone project",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -2000,7 +1999,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000098-6f63-7275-7365-202098000000"),
                             CourseCode = "ENSC402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with professional practice techniques",
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
@@ -2011,7 +2010,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("00000099-6f63-7275-7365-202099000000"),
                             CourseCode = "FINA101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level program fundamentals skills development",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2022,7 +2021,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000009a-6f63-7275-7365-20209a000000"),
                             CourseCode = "FINA102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in basic principles",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2033,7 +2032,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000009b-6f63-7275-7365-20209b000000"),
                             CourseCode = "FINA201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard intermediate concepts practices and procedures",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2044,7 +2043,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000009c-6f63-7275-7365-20209c000000"),
                             CourseCode = "FINA202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with advanced theory techniques",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2055,7 +2054,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000009d-6f63-7275-7365-20209d000000"),
                             CourseCode = "FINA301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in practical applications",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2066,7 +2065,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000009e-6f63-7275-7365-20209e000000"),
                             CourseCode = "FINA302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in specialized techniques",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2077,7 +2076,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("0000009f-6f63-7275-7365-20209f000000"),
                             CourseCode = "FINA401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in capstone project",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2088,7 +2087,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a0-6f63-7275-7365-2020a0000000"),
                             CourseCode = "FINA402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Industry-standard professional practice practices and procedures",
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
@@ -2099,7 +2098,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a1-6f63-7275-7365-2020a1000000"),
                             CourseCode = "MABI101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with program fundamentals techniques",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2110,7 +2109,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a2-6f63-7275-7365-2020a2000000"),
                             CourseCode = "MABI102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of basic principles in marine biology",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2121,7 +2120,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a3-6f63-7275-7365-2020a3000000"),
                             CourseCode = "MABI201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of intermediate concepts",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2132,7 +2131,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a4-6f63-7275-7365-2020a4000000"),
                             CourseCode = "MABI202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level advanced theory skills development",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2143,7 +2142,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a5-6f63-7275-7365-2020a5000000"),
                             CourseCode = "MABI301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard practical applications practices and procedures",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2154,7 +2153,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a6-6f63-7275-7365-2020a6000000"),
                             CourseCode = "MABI302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level specialized techniques skills development",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2165,7 +2164,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a7-6f63-7275-7365-2020a7000000"),
                             CourseCode = "MABI401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard capstone project practices and procedures",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2176,7 +2175,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a8-6f63-7275-7365-2020a8000000"),
                             CourseCode = "MABI402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Industry-standard professional practice practices and procedures",
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
@@ -2187,7 +2186,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000a9-6f63-7275-7365-2020a9000000"),
                             CourseCode = "RET101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Fundamental principles and theory of program fundamentals",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2198,7 +2197,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000aa-6f63-7275-7365-2020aa000000"),
                             CourseCode = "RET102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard basic principles practices and procedures",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2209,7 +2208,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000ab-6f63-7275-7365-2020ab000000"),
                             CourseCode = "RET201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard intermediate concepts practices and procedures",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2220,7 +2219,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000ac-6f63-7275-7365-2020ac000000"),
                             CourseCode = "RET202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of advanced theory in renewable energy technology",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2231,7 +2230,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000ad-6f63-7275-7365-2020ad000000"),
                             CourseCode = "RET301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with practical applications techniques",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2242,7 +2241,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000ae-6f63-7275-7365-2020ae000000"),
                             CourseCode = "RET302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in specialized techniques",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2253,7 +2252,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000af-6f63-7275-7365-2020af000000"),
                             CourseCode = "RET401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with capstone project techniques",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2264,7 +2263,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b0-6f63-7275-7365-2020b0000000"),
                             CourseCode = "RET402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with professional practice techniques",
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
@@ -2275,7 +2274,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b1-6f63-7275-7365-2020b1000000"),
                             CourseCode = "PEEN101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level program fundamentals skills development",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2286,7 +2285,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b2-6f63-7275-7365-2020b2000000"),
                             CourseCode = "PEEN102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of basic principles in petroleum engineering",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2297,7 +2296,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b3-6f63-7275-7365-2020b3000000"),
                             CourseCode = "PEEN201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level intermediate concepts skills development",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2308,7 +2307,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b4-6f63-7275-7365-2020b4000000"),
                             CourseCode = "PEEN202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of advanced theory",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2319,7 +2318,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b5-6f63-7275-7365-2020b5000000"),
                             CourseCode = "PEEN301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with practical applications techniques",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2330,7 +2329,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b6-6f63-7275-7365-2020b6000000"),
                             CourseCode = "PEEN302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Professional-level specialized techniques skills development",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2341,7 +2340,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b7-6f63-7275-7365-2020b7000000"),
                             CourseCode = "PEEN401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in capstone project",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2352,7 +2351,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b8-6f63-7275-7365-2020b8000000"),
                             CourseCode = "PEEN402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Hands-on experience with professional practice techniques",
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
@@ -2363,7 +2362,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000b9-6f63-7275-7365-2020b9000000"),
                             CourseCode = "SODE101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level program fundamentals skills development",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2374,7 +2373,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000ba-6f63-7275-7365-2020ba000000"),
                             CourseCode = "SODE102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Hands-on experience with basic principles techniques",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2385,7 +2384,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000bb-6f63-7275-7365-2020bb000000"),
                             CourseCode = "SODE201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in intermediate concepts",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2396,7 +2395,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000bc-6f63-7275-7365-2020bc000000"),
                             CourseCode = "SODE202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard advanced theory practices and procedures",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2407,7 +2406,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000bd-6f63-7275-7365-2020bd000000"),
                             CourseCode = "SODE301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of practical applications in software development",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2418,7 +2417,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000be-6f63-7275-7365-2020be000000"),
                             CourseCode = "SODE302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Comprehensive study of specialized techniques in software development",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2429,7 +2428,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000bf-6f63-7275-7365-2020bf000000"),
                             CourseCode = "SODE401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in capstone project",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2440,7 +2439,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c0-6f63-7275-7365-2020c0000000"),
                             CourseCode = "SODE402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in professional practice",
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
@@ -2451,7 +2450,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c1-6f63-7275-7365-2020c1000000"),
                             CourseCode = "AGTE101",
                             CourseName = "Program Fundamentals",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Advanced concepts and practical applications in program fundamentals",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2462,7 +2461,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c2-6f63-7275-7365-2020c2000000"),
                             CourseCode = "AGTE102",
                             CourseName = "Basic Principles",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in basic principles",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2473,7 +2472,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c3-6f63-7275-7365-2020c3000000"),
                             CourseCode = "AGTE201",
                             CourseName = "Intermediate Concepts",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Advanced concepts and practical applications in intermediate concepts",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2484,7 +2483,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c4-6f63-7275-7365-2020c4000000"),
                             CourseCode = "AGTE202",
                             CourseName = "Advanced Theory",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Industry-standard advanced theory practices and procedures",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2495,7 +2494,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c5-6f63-7275-7365-2020c5000000"),
                             CourseCode = "AGTE301",
                             CourseName = "Practical Applications",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of practical applications",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2506,7 +2505,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c6-6f63-7275-7365-2020c6000000"),
                             CourseCode = "AGTE302",
                             CourseName = "Specialized Techniques",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of specialized techniques",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2517,7 +2516,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c7-6f63-7275-7365-2020c7000000"),
                             CourseCode = "AGTE401",
                             CourseName = "Capstone Project",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 4,
                             Description = "Fundamental principles and theory of capstone project",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2528,7 +2527,7 @@ namespace LearnerCenter.API.Migrations
                             CourseId = new Guid("000000c8-6f63-7275-7365-2020c8000000"),
                             CourseCode = "AGTE402",
                             CourseName = "Professional Practice",
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             CreditHours = 3,
                             Description = "Professional-level professional practice skills development",
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
@@ -2540,34 +2539,34 @@ namespace LearnerCenter.API.Migrations
                 {
                     b.Property<Guid>("EnrollmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CampusId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.Property<string>("Degree")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("character varying(500)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ProgramName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EnrollmentId");
 
@@ -2583,7 +2582,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
                             CampusId = new Guid("00000001-6163-706d-7573-202001000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Comprehensive computer science program covering programming, algorithms, and software engineering",
                             IsActive = true,
@@ -2593,7 +2592,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
                             CampusId = new Guid("00000001-6163-706d-7573-202001000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Engineering",
                             Description = "Engineering fundamentals with multiple specializations available",
                             IsActive = true,
@@ -2603,7 +2602,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
                             CampusId = new Guid("00000001-6163-706d-7573-202001000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Business Administration",
                             Description = "Comprehensive business management and leadership program",
                             IsActive = true,
@@ -2613,7 +2612,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
                             CampusId = new Guid("00000002-6163-706d-7573-202002000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Science in Nursing",
                             Description = "Registered nurse preparation program with clinical experience",
                             IsActive = true,
@@ -2623,7 +2622,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
                             CampusId = new Guid("00000002-6163-706d-7573-202002000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Information security and ethical hacking program",
                             IsActive = true,
@@ -2633,7 +2632,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
                             CampusId = new Guid("00000002-6163-706d-7573-202002000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Modern marketing strategies and social media management",
                             IsActive = true,
@@ -2643,7 +2642,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
                             CampusId = new Guid("00000003-6163-706d-7573-202003000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Automotive repair and maintenance certification program",
                             IsActive = true,
@@ -2653,7 +2652,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
                             CampusId = new Guid("00000003-6163-706d-7573-202003000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Professional culinary techniques and food service management",
                             IsActive = true,
@@ -2663,7 +2662,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
                             CampusId = new Guid("00000004-6163-706d-7573-202004000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Fine Arts",
                             Description = "Visual communication and digital design program",
                             IsActive = true,
@@ -2673,7 +2672,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
                             CampusId = new Guid("00000004-6163-706d-7573-202004000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Modern web technologies and full-stack development",
                             IsActive = true,
@@ -2683,7 +2682,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
                             CampusId = new Guid("00000005-6163-706d-7573-202005000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Law enforcement and criminal investigation program",
                             IsActive = true,
@@ -2693,7 +2692,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
                             CampusId = new Guid("00000005-6163-706d-7573-202005000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Arts",
                             Description = "Child development and early learning education",
                             IsActive = true,
@@ -2703,7 +2702,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
                             CampusId = new Guid("00000006-6163-706d-7573-202006000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Heating, ventilation, and air conditioning systems",
                             IsActive = true,
@@ -2713,7 +2712,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
                             CampusId = new Guid("00000006-6163-706d-7573-202006000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Physical therapy support and rehabilitation techniques",
                             IsActive = true,
@@ -2723,7 +2722,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
                             CampusId = new Guid("00000006-6163-706d-7573-202006000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Animal care and veterinary assistant training",
                             IsActive = true,
@@ -2733,7 +2732,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000010-6e65-6f72-6c6c-6d6510000000"),
                             CampusId = new Guid("00000007-6163-706d-7573-202007000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Certificate",
                             Description = "Advanced welding techniques and metallurgy",
                             IsActive = true,
@@ -2743,7 +2742,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000011-6e65-6f72-6c6c-6d6511000000"),
                             CampusId = new Guid("00000007-6163-706d-7573-202007000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Oral health care and preventive dental services",
                             IsActive = true,
@@ -2753,7 +2752,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000012-6e65-6f72-6c6c-6d6512000000"),
                             CampusId = new Guid("00000007-6163-706d-7573-202007000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Arts",
                             Description = "Contemporary fashion design and merchandising",
                             IsActive = true,
@@ -2763,7 +2762,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000013-6e65-6f72-6c6c-6d6513000000"),
                             CampusId = new Guid("00000008-6163-706d-7573-202008000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Ecology and environmental conservation program",
                             IsActive = true,
@@ -2773,7 +2772,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000014-6e65-6f72-6c6c-6d6514000000"),
                             CampusId = new Guid("00000008-6163-706d-7573-202008000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Financial markets and investment analysis",
                             IsActive = true,
@@ -2783,7 +2782,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000015-6e65-6f72-6c6c-6d6515000000"),
                             CampusId = new Guid("00000009-6163-706d-7573-202009000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Science",
                             Description = "Study of ocean ecosystems and marine life",
                             IsActive = true,
@@ -2793,7 +2792,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000016-6e65-6f72-6c6c-6d6516000000"),
                             CampusId = new Guid("00000009-6163-706d-7573-202009000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Solar and wind energy systems technology",
                             IsActive = true,
@@ -2803,7 +2802,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000017-6e65-6f72-6c6c-6d6517000000"),
                             CampusId = new Guid("00000009-6163-706d-7573-202009000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Oil and gas extraction technology",
                             IsActive = true,
@@ -2813,7 +2812,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000018-6e65-6f72-6c6c-6d6518000000"),
                             CampusId = new Guid("0000000a-6163-706d-7573-20200a000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Modern software engineering and development practices",
                             IsActive = true,
@@ -2823,7 +2822,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000019-6e65-6f72-6c6c-6d6519000000"),
                             CampusId = new Guid("0000000a-6163-706d-7573-20200a000000"),
-                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Modern farming and crop management techniques",
                             IsActive = true,
@@ -2835,37 +2834,37 @@ namespace LearnerCenter.API.Migrations
                 {
                     b.Property<Guid>("TermId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("RegistrationEndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("RegistrationStartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("TermCode")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("TermName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("TermId");
 
@@ -2879,40 +2878,40 @@ namespace LearnerCenter.API.Migrations
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<Guid?>("EnrollmentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastLoginDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("UserId");
 
@@ -2931,63 +2930,63 @@ namespace LearnerCenter.API.Migrations
                 {
                     b.Property<Guid>("UserProfileId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Address")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("EmergencyContactName")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("EmergencyContactPhone")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Gender")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("character varying(10)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("State")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ZipCode")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("character varying(10)");
 
                     b.HasKey("UserProfileId");
 

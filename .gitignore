@@ -1,6 +1,7 @@
 # .NET specific
 **/bin/
 **/obj/
+**/publish/
 **/*.user
 **/*.suo
 **/*.cache
@@ -9,6 +10,11 @@
 **/*.nupkg
 **/TestResults/
 **/.nuget/
+
+# Build artifacts (generated during deployment)
+# Note: publish folder is needed for Azure deployments but shouldn't be in git
+deploy*.zip
+**/*.deploy.zip
 
 # Configuration files with secrets
 backend/appsettings.Development.json
@@ -38,6 +44,7 @@ backend/appsettings.Production.json
 # Logs
 **/logs/
 **/*.log
+latestlogs
 
 # Database files
 **/*.db

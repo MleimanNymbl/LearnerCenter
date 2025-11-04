@@ -13,7 +13,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<LearnerCen
         // Use production PostgreSQL for migrations when specified
         if (args.Length > 0 && args[0] == "--use-postgresql")
         {
-            optionsBuilder.UseNpgsql("Host=db.xdjtrfezlpelyebuxsji.supabase.co;Database=postgres;Username=postgres;Password=Password123!;Port=5432;SSL Mode=Require");
+            optionsBuilder.UseNpgsql("Host=aws-1-us-east-2.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.hpqliofwxllnsoaqaolv;Password=Password123!;Sslmode=Require");
         }
         else
         {

@@ -6,11 +6,33 @@ using LearnerCenter.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure Entity Framework
+// Configure Entity Framework with dynamic database provider selection
 builder.Services.AddDbContext<LearnerCenterDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlServer(connectionString);
+    
+    try 
+    {
+        Console.WriteLine($"Connection string: {connectionString}");
+        Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+        
+        // Use PostgreSQL in production, SQL Server in development/local
+        if (builder.Environment.IsProduction())
+        {
+            Console.WriteLine("Using PostgreSQL");
+            options.UseNpgsql(connectionString);
+        }
+        else
+        {
+            Console.WriteLine("Using SQL Server");
+            options.UseSqlServer(connectionString);
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database config error: {ex}");
+        throw;
+    }
 });
 
 // Add Controllers
@@ -29,12 +51,12 @@ builder.Services.AddCors(options =>
         }
         else
         {
-            // Allow production hosting domains
+            // Allow production hosting domains including Azure Static Web Apps
             policy.SetIsOriginAllowed(origin => 
                 {
                     var uri = new Uri(origin);
-                    return uri.Host.EndsWith(".vercel.app") ||
-                           uri.Host.EndsWith(".railway.app") ||
+                    return uri.Host.EndsWith(".azurestaticapps.net") ||
+                           uri.Host.EndsWith(".1.azurestaticapps.net") ||
                            uri.Host == "localhost";
                 })
                   .AllowAnyHeader()
@@ -108,6 +130,20 @@ app.UseHttpsRedirection();
 // Add health check endpoint
 app.MapGet("/", () => "LearnerCenter API is running!");
 app.MapGet("/api/health", () => new { status = "healthy", timestamp = DateTime.UtcNow });
+
+// Add database connection test endpoint
+app.MapGet("/api/test-db", async (LearnerCenterDbContext context) =>
+{
+    try
+    {
+        var canConnect = await context.Database.CanConnectAsync();
+        return Results.Ok(new { canConnect, message = canConnect ? "Database connection successful" : "Database connection failed" });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Database error: {ex.Message}");
+    }
+});
 
 // Add manual migration endpoint
 app.MapPost("/api/migrate", async (LearnerCenterDbContext context) =>

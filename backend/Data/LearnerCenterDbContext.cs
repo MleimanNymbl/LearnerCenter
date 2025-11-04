@@ -9,6 +9,12 @@ namespace LearnerCenter.API.Data
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings => 
+                warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+        }
+
         // DbSets for each entity
         public DbSet<User> Users { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
@@ -94,30 +100,32 @@ namespace LearnerCenter.API.Data
 
 
 
-            // Add some constraints and default values
+            // Add some constraints and default values with provider-specific SQL
+            var utcNowSql = Database.IsNpgsql() ? "NOW() AT TIME ZONE 'UTC'" : "GETUTCDATE()";
+
             modelBuilder.Entity<User>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql(utcNowSql);
 
             modelBuilder.Entity<UserProfile>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql(utcNowSql);
 
             modelBuilder.Entity<Campus>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql(utcNowSql);
 
             modelBuilder.Entity<Course>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql(utcNowSql);
 
             modelBuilder.Entity<Enrollment>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql(utcNowSql);
 
             modelBuilder.Entity<Term>()
                 .Property(e => e.CreatedDate)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql(utcNowSql);
 
 
         }
