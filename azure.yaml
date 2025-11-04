@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: learnercenter
+metadata:
+  template: learnercenter@0.0.1-beta
+
+infra:
+  provider: bicep
+  path: infra
+
+services:
+  api:
+    project: ./backend
+    language: dotnet
+    host: appservice
+    dist: publish
+  
+  web:
+    project: ./frontend
+    language: js
+    host: staticwebapp
+    dist: build
+
+hooks:
+  preprovision:
+    posix:
+      shell: sh
+      run: echo "Starting infrastructure provisioning..."
+    windows:
+      shell: pwsh
+      run: Write-Host "Starting infrastructure provisioning..."
+
+  postprovision:
+    posix:
+      shell: sh  
+      run: echo "Infrastructure provisioning completed"
+    windows:
+      shell: pwsh
+      run: Write-Host "Infrastructure provisioning completed"
+
+  predeploy:
+    posix:
+      shell: sh
+      run: echo "Starting application deployment..."
+    windows:
+      shell: pwsh
+      run: Write-Host "Starting application deployment..."
+
+  postdeploy:
+    posix:
+      shell: sh
+      run: echo "Application deployment completed"
+    windows:
+      shell: pwsh
+      run: Write-Host "Application deployment completed"

@@ -68,3 +68,7 @@ latestlogs
 # Coverage reports
 **/coverage/
 **/*.lcov
+
+# Chat mode files
+**/chatmode.md
+chatmode.md
