@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using LearnerCenter.API.Interfaces;
 using LearnerCenter.API.Models.DTOs;
+using LearnerCenter.API.Services;
+using System.Security.Claims;
 
 namespace LearnerCenter.API.Controllers
 {
@@ -9,11 +12,13 @@ namespace LearnerCenter.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IJwtService _jwtService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IUserService userService, ILogger<AuthController> logger)
+        public AuthController(IUserService userService, IJwtService jwtService, ILogger<AuthController> logger)
         {
             _userService = userService;
+            _jwtService = jwtService;
             _logger = logger;
         }
 
@@ -36,14 +41,14 @@ namespace LearnerCenter.API.Controllers
                     return Unauthorized(new { success = false, message = "Invalid email/username or password" });
                 }
 
-                // Generate a simple token (in production, use JWT)
-                var token = GenerateToken(user);
+                // Generate JWT token
+                var token = _jwtService.GenerateToken(user);
 
                 var response = new LoginResponseDto
                 {
                     Token = token,
                     User = user,
-                    ExpiresAt = DateTime.UtcNow.AddHours(24).ToString("O")
+                    ExpiresAt = DateTime.UtcNow.AddHours(1).ToString("O") // JWT expiry from config
                 };
 
                 _logger.LogInformation("User {Username} logged in successfully", user.Username);
@@ -78,13 +83,27 @@ namespace LearnerCenter.API.Controllers
         }
 
         [HttpGet("profile")]
+        [Authorize]
         public async Task<ActionResult<UserDto>> GetProfile()
         {
             try
             {
-                // TODO: Extract user ID from JWT token
-                // For demo purposes, return a placeholder response
-                return Ok(new { success = false, message = "Profile endpoint not yet implemented" });
+                // Extract user ID from JWT token
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                
+                if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+                {
+                    return Unauthorized(new { success = false, message = "Invalid or missing user authentication." });
+                }
+
+                var user = await _userService.GetUserByIdAsync(userId);
+                
+                if (user == null)
+                {
+                    return NotFound(new { success = false, message = "User not found." });
+                }
+
+                return Ok(new { success = true, data = user });
             }
             catch (Exception ex)
             {
@@ -96,18 +115,9 @@ namespace LearnerCenter.API.Controllers
         [HttpPost("logout")]
         public ActionResult Logout()
         {
-            // In a real app, you'd invalidate the token
-            // For now, just return success
+            // With JWT tokens, logout is handled client-side by removing the token
+            // In production, you might want to implement token blacklisting
             return Ok(new { success = true, message = "Logged out successfully" });
-        }
-
-        private string GenerateToken(UserDto user)
-        {
-            // TODO: Implement proper JWT token generation
-            // For demo purposes, return a simple token
-            var tokenData = $"{user.UserId}:{user.Username}:{DateTime.UtcNow:yyyyMMddHHmmss}";
-            var tokenBytes = System.Text.Encoding.UTF8.GetBytes(tokenData);
-            return Convert.ToBase64String(tokenBytes);
         }
     }
 }
