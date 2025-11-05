@@ -13,6 +13,7 @@ namespace LearnerCenter.API.Interfaces
         Task<User> CreateUserAsync(User user);
         Task<UserProfile> CreateUserProfileAsync(UserProfile userProfile);
         Task<User?> UpdateUserAsync(User user);
+        Task<bool> UpdateLastLoginDateAsync(Guid userId);
         Task<bool> DeleteUserAsync(Guid userId);
         Task<IEnumerable<User>> GetAllUsersAsync();
     }

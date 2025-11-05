@@ -27,12 +27,18 @@ import { PaymentInformationStep } from '../components/payment';
 interface LocationState {
   enrollmentId: string;
   programName: string;
+  tuitionCost?: number;
 }
 
 const UserRegistration: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { enrollmentId, programName } = location.state as LocationState || {};
+  const { enrollmentId, programName, tuitionCost } = location.state as LocationState || {};
+
+  // Debug what's coming through
+  useEffect(() => {
+    console.log('UserRegistration received:', { enrollmentId, programName, tuitionCost });
+  }, [enrollmentId, programName, tuitionCost]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -285,6 +291,8 @@ const UserRegistration: React.FC = () => {
               phoneNumber: formData.phoneNumber,
               createdDate: '',
             }}
+            tuitionCost={tuitionCost ?? 2500} // Default to $2,500 if not provided
+            programName={programName || 'Selected Program'}
           />
         );
       default:

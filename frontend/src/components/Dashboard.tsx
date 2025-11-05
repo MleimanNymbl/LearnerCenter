@@ -9,17 +9,19 @@ import {
   Button,
 } from '@mui/material';
 import { School, Assignment, CalendarToday, Person } from '@mui/icons-material';
+import { useAuth } from '../contexts/AuthContext';
 
-const SimpleDashboard: React.FC = () => {
+const Dashboard: React.FC = () => {
+  const { user } = useAuth();
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Student Dashboard
+          {user?.role || 'Student'} Dashboard
         </Typography>
         <Typography variant="body1" color="textSecondary">
-          Welcome back! Here's an overview of your academic progress.
+          Welcome back, {user?.firstName || user?.username || 'Student'}! Here's an overview of your academic progress.
         </Typography>
       </Box>
 
@@ -107,4 +109,4 @@ const SimpleDashboard: React.FC = () => {
   );
 };
 
-export default SimpleDashboard;
+export default Dashboard;

@@ -95,11 +95,14 @@ const EnrollmentRegistration: React.FC = () => {
       const selectedEnrollmentData = enrollments.find(e => e.enrollmentId === selectedEnrollment);
       if (selectedEnrollmentData) {
         localStorage.setItem('selectedEnrollment', JSON.stringify(selectedEnrollmentData));
+        console.log('Selected enrollment data:', selectedEnrollmentData);
+        console.log('Tuition cost being passed:', selectedEnrollmentData.cost);
         // Navigate to user registration form
         navigate('/user-registration', {
           state: {
             enrollmentId: selectedEnrollmentData.enrollmentId,
-            programName: selectedEnrollmentData.name
+            programName: selectedEnrollmentData.name,
+            tuitionCost: selectedEnrollmentData.cost
           }
         });
       }

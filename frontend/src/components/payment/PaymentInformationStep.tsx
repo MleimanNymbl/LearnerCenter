@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
-  Alert
+  Alert,
+  Card,
+  CardContent,
+  Divider
 } from '@mui/material';
 import { CreditCard } from '@mui/icons-material';
 import { PaymentData } from '../../types/user';
@@ -19,6 +22,8 @@ interface PaymentInformationStepProps {
   isValidating: boolean;
   validationSuccess: boolean;
   userProfile?: UserProfile;
+  tuitionCost?: number;
+  programName?: string;
 }
 
 const PaymentInformationStep: React.FC<PaymentInformationStepProps> = ({
@@ -27,7 +32,9 @@ const PaymentInformationStep: React.FC<PaymentInformationStepProps> = ({
   onInputChange,
   isValidating,
   validationSuccess,
-  userProfile
+  userProfile,
+  tuitionCost = 0,
+  programName = 'Program'
 }) => {
   const [cardType, setCardType] = useState<string>('');
 
@@ -105,6 +112,66 @@ const PaymentInformationStep: React.FC<PaymentInformationStepProps> = ({
           Use any future expiry date and any 3-4 digit CVV.
         </Typography>
       </Box>
+
+      {/* Payment Summary - Due Today */}
+      {tuitionCost >= 0 && (
+        <Card 
+          elevation={2} 
+          sx={{ 
+            mb: 3, 
+            bgcolor: 'success.50',
+            border: '2px solid',
+            borderColor: 'success.main',
+            borderRadius: 2
+          }}
+        >
+          <CardContent sx={{ textAlign: 'center' }}>
+            <Typography variant="h5" gutterBottom sx={{ color: 'success.dark', fontWeight: 'bold' }}>
+              💳 Due Today
+            </Typography>
+            
+            <Typography variant="h3" sx={{ color: 'success.main', fontWeight: 'bold', mb: 1 }}>
+              ${(tuitionCost * 0.05).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </Typography>
+            
+            <Typography variant="h6" sx={{ color: 'text.primary', mb: 2 }}>
+              Registration Fee for {programName}
+            </Typography>
+            
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              bgcolor: 'white',
+              p: 2,
+              borderRadius: 1,
+              border: '1px solid',
+              borderColor: 'grey.200'
+            }}>
+              <Box sx={{ textAlign: 'left' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Total Program Cost:
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Registration Fee (5%):
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: 'right' }}>
+                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                  ${tuitionCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'success.main' }}>
+                  ${(tuitionCost * 0.05).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </Typography>
+              </Box>
+            </Box>
+            
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
+              This secures your enrollment. Remaining balance will be covered by your payment plan.
+            </Typography>
+          </CardContent>
+        </Card>
+      )}
 
       <PaymentValidationStatus 
         isValidating={isValidating} 

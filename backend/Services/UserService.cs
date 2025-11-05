@@ -116,20 +116,104 @@ namespace LearnerCenter.API.Services
 
         private string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
+            // Generate a random salt
+            using (var rng = RandomNumberGenerator.Create())
             {
-                // Add a simple salt (in production, use a proper random salt per user)
-                var saltedPassword = password + "LearnerCenter2024!";
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
-                return Convert.ToBase64String(hashedBytes);
+                var saltBytes = new byte[32]; // 256 bits
+                rng.GetBytes(saltBytes);
+                var salt = Convert.ToBase64String(saltBytes);
+                
+                // Hash password with salt using PBKDF2
+                using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, 10000, HashAlgorithmName.SHA256))
+                {
+                    var hashBytes = pbkdf2.GetBytes(32); // 256 bits
+                    var hash = Convert.ToBase64String(hashBytes);
+                    
+                    // Return salt:hash format for storage
+                    return $"{salt}:{hash}";
+                }
             }
         }
 
-        // Helper method for future login functionality
-        public bool VerifyPassword(string password, string hash)
+        // Helper method for verifying password against stored hash
+        public bool VerifyPassword(string password, string storedHash)
         {
-            var hashedInput = HashPassword(password);
-            return hashedInput == hash;
+            try
+            {
+                // Check if it's the new salt:hash format
+                var parts = storedHash.Split(':');
+                if (parts.Length == 2)
+                {
+                    // New format with salt
+                    var salt = Convert.FromBase64String(parts[0]);
+                    var hash = parts[1];
+                    
+                    using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000, HashAlgorithmName.SHA256))
+                    {
+                        var hashBytes = pbkdf2.GetBytes(32);
+                        var computedHash = Convert.ToBase64String(hashBytes);
+                        return computedHash == hash;
+                    }
+                }
+                else
+                {
+                    // Legacy format (for backward compatibility with existing users)
+                    using (var sha256 = SHA256.Create())
+                    {
+                        var saltedPassword = password + "LearnerCenter2024!";
+                        var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(saltedPassword));
+                        var legacyHash = Convert.ToBase64String(hashedBytes);
+                        return legacyHash == storedHash;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<UserDto?> AuthenticateUserAsync(string email, string password)
+        {
+            User? user = null;
+
+            // Try to find user by username first
+            user = await _userRepository.GetUserByUsernameAsync(email);
+            
+            // If not found by username, try by email
+            if (user == null)
+            {
+                user = await _userRepository.GetUserByEmailAsync(email);
+            }
+
+            // If user not found, return null
+            if (user == null)
+            {
+                return null;
+            }
+
+            // Verify password
+            if (!VerifyPassword(password, user.PasswordHash))
+            {
+                return null;
+            }
+
+            // Check if user is active
+            if (!user.IsActive || user.Status != "Active")
+            {
+                return null;
+            }
+
+            // Update last login date
+            await _userRepository.UpdateLastLoginDateAsync(user.UserId);
+
+            // Return user DTO (without password hash)
+            return MapToUserDto(user);
+        }
+
+        public async Task<bool> UpdateLastLoginDateAsync(Guid userId)
+        {
+            return await _userRepository.UpdateLastLoginDateAsync(userId);
         }
 
         private UserDto MapToUserDto(User user)

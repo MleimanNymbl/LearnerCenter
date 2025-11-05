@@ -97,6 +97,19 @@ namespace LearnerCenter.API.Repositories
             }
         }
 
+        public async Task<bool> UpdateLastLoginDateAsync(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.LastLoginDate = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> DeleteUserAsync(Guid userId)
         {
             var user = await _context.Users.FindAsync(userId);

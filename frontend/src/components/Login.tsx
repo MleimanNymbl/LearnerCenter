@@ -10,15 +10,17 @@ import {
   Link,
   CircularProgress,
 } from '@mui/material';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, Link as RouterLink, useLocation } from 'react-router-dom';
 import { School, ArrowBack } from '@mui/icons-material';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,15 +31,16 @@ const Login: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
-    
-    // TODO: Implement actual login logic with backend
-    setTimeout(() => {
-      setIsLoading(false);
-      // For now, just show success message
-      alert('Login successful! (This is a demo - backend not connected yet)');
-      navigate('/dashboard');
-    }, 1500);
+    try {
+      await login(email, password);
+      
+      // Redirect to the intended page or dashboard
+      const from = (location.state as any)?.from?.pathname || '/dashboard';
+      navigate(from, { replace: true });
+    } catch (error: any) {
+      console.error('Login failed:', error);
+      setError(error.response?.data?.message || error.message || 'Login failed. Please try again.');
+    }
   };
 
   return (
