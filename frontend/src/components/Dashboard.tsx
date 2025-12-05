@@ -22,6 +22,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { coursesApi } from '../services/apiService';
 import StatusChip, { StatusType } from './common/StatusChip';
+import { useEnrollment } from '../hooks/useEnrollment';
 
 interface Course {
   courseId: string;
@@ -36,6 +37,7 @@ interface Course {
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const enrollment = useEnrollment();
   const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]);
   const [currentCourse, setCurrentCourse] = useState<Course | null>(null);
@@ -240,17 +242,17 @@ const Dashboard: React.FC = () => {
                   <Assignment color="primary" sx={{ mr: 1 }} />
                   <Typography variant="h6">My Programs</Typography>
                 </Box>
-                {user?.enrollment && <StatusChip status="Active" />}
+                {enrollment && <StatusChip status="Active" />}
               </Box>
               <Divider sx={{ mb: 2 }} />
-              {user?.enrollment ? (
+              {enrollment ? (
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
                   <Box>
                     <Typography variant="caption" color="textSecondary" display="block">
                       PROGRAM NAME
                     </Typography>
                     <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {user.enrollment.programName}
+                      {enrollment.programName}
                     </Typography>
                   </Box>
                   <Box>
@@ -258,7 +260,7 @@ const Dashboard: React.FC = () => {
                       DEGREE
                     </Typography>
                     <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {user.enrollment.degree || 'N/A'}
+                      {enrollment.degree || 'N/A'}
                     </Typography>
                   </Box>
                   <Box>
@@ -266,8 +268,8 @@ const Dashboard: React.FC = () => {
                       ENROLLMENT DATE
                     </Typography>
                     <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {user.enrollment.createdDate
-                        ? new Date(user.enrollment.createdDate).toLocaleDateString()
+                      {enrollment.createdDate
+                        ? new Date(enrollment.createdDate).toLocaleDateString()
                         : 'N/A'}
                     </Typography>
                   </Box>

@@ -257,6 +257,26 @@ const Profile: React.FC = () => {
               <Box sx={{ flex: '1 1 45%', minWidth: '250px' }}>
                 <TextField
                   fullWidth
+                  label="Username"
+                  value={profileData.username}
+                  disabled
+                  InputProps={{ readOnly: true }}
+                  helperText="Username cannot be changed"
+                />
+              </Box>
+              <Box sx={{ flex: '1 1 45%', minWidth: '250px' }}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  value={profileData.email}
+                  disabled
+                  InputProps={{ readOnly: true }}
+                  helperText="Email cannot be changed"
+                />
+              </Box>
+              <Box sx={{ flex: '1 1 45%', minWidth: '250px' }}>
+                <TextField
+                  fullWidth
                   label="First Name"
                   value={profileData.firstName}
                   disabled
