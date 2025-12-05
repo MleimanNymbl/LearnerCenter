@@ -35,7 +35,6 @@ const UserRegistration: React.FC = () => {
   const location = useLocation();
   const { enrollmentId, programName, tuitionCost } = location.state as LocationState || {};
 
-  // Debug what's coming through
   useEffect(() => {
     console.log('UserRegistration received:', { enrollmentId, programName, tuitionCost });
   }, [enrollmentId, programName, tuitionCost]);

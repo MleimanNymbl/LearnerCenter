@@ -13,5 +13,6 @@ namespace LearnerCenter.API.Interfaces
         Task<UserDto?> AuthenticateUserAsync(string email, string password);
         bool VerifyPassword(string password, string hash);
         Task<bool> UpdateLastLoginDateAsync(Guid userId);
+        Task<UserDto?> UpdateUserProfileAsync(Guid userId, UpdateProfileDto updateDto);
     }
 }

@@ -32,7 +32,6 @@ namespace LearnerCenter.API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                // Authenticate user with proper password verification
                 var user = await _userService.AuthenticateUserAsync(loginDto.Email, loginDto.Password);
 
                 if (user == null)
@@ -41,7 +40,6 @@ namespace LearnerCenter.API.Controllers
                     return Unauthorized(new { success = false, message = "Invalid email/username or password" });
                 }
 
-                // Generate JWT token
                 var token = _jwtService.GenerateToken(user);
 
                 var response = new LoginResponseDto
@@ -109,6 +107,41 @@ namespace LearnerCenter.API.Controllers
             {
                 _logger.LogError(ex, "Error occurred while retrieving profile");
                 return StatusCode(500, new { success = false, message = "An error occurred while retrieving profile." });
+            }
+        }
+
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> UpdateProfile([FromBody] UpdateProfileDto updateDto)
+        {
+            try
+            {
+                // Extract user ID from JWT token
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                
+                if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+                {
+                    return Unauthorized(new { success = false, message = "Invalid or missing user authentication." });
+                }
+
+                var updatedUser = await _userService.UpdateUserProfileAsync(userId, updateDto);
+                
+                if (updatedUser == null)
+                {
+                    return NotFound(new { success = false, message = "User not found." });
+                }
+
+                return Ok(new { success = true, data = updatedUser });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("Profile update failed: {Message}", ex.Message);
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating profile");
+                return StatusCode(500, new { success = false, message = "An error occurred while updating profile." });
             }
         }
 

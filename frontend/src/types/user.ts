@@ -13,6 +13,19 @@ export interface User {
   role?: UserRole;
   firstName?: string;
   lastName?: string;
+  profile?: {
+    firstName: string;
+    lastName: string;
+    phoneNumber?: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    dateOfBirth?: string;
+    gender?: string;
+    emergencyContactName?: string;
+    emergencyContactPhone?: string;
+  };
 }
 
 export interface UserProfile {

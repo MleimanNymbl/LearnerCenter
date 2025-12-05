@@ -56,8 +56,7 @@ builder.Services.AddCors(options =>
         {
             // Allow production hosting domains including Azure Static Web Apps
             policy.WithOrigins(
-                "https://lemon-smoke-05044a110.3.azurestaticapps.net",
-                "https://lemon-smoke-05044a110-preview.centralus.3.azurestaticapps.net"
+                "https://white-sand-01bed070f.3.azurestaticapps.net"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()

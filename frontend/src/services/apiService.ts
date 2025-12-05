@@ -30,6 +30,9 @@ export const authApi = {
   
   getProfile: () =>
     api.get<ApiResponse<User>>('/auth/profile'),
+  
+  updateProfile: (userData: any) =>
+    api.put<ApiResponse<User>>('/auth/profile', userData),
 };
 
 // Users API

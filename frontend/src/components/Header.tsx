@@ -49,28 +49,15 @@ const Header: React.FC = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}
+          onClick={() => navigate('/dashboard')}
+        >
           Learner Center
         </Typography>
 
         {isAuthenticated ? (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {/* Navigation buttons based on user role */}
-            <Button
-              color="inherit"
-              startIcon={<Dashboard />}
-              onClick={() => navigate('/dashboard')}
-            >
-              Dashboard
-            </Button>
-
-            <Button
-              color="inherit"
-              startIcon={<School />}
-              onClick={() => navigate('/courses')}
-            >
-              Courses
-            </Button>
 
             {(user?.role === UserRole.Admin || user?.role === UserRole.Instructor) && (
               <Button
@@ -81,14 +68,6 @@ const Header: React.FC = () => {
                 Users
               </Button>
             )}
-
-            <Button
-              color="inherit"
-              startIcon={<Assignment />}
-              onClick={() => navigate('/assignments')}
-            >
-              Assignments
-            </Button>
 
             {/* User menu */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>

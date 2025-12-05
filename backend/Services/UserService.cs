@@ -253,6 +253,55 @@ namespace LearnerCenter.API.Services
             };
         }
 
+        public async Task<UserDto?> UpdateUserProfileAsync(Guid userId, UpdateProfileDto updateDto)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            
+            if (user == null)
+            {
+                return null;
+            }
+
+            // Check for unique constraints only if username/email are being changed
+            if (!string.IsNullOrWhiteSpace(updateDto.Username) && user.Username != updateDto.Username)
+            {
+                var existingUser = await _userRepository.GetUserByUsernameAsync(updateDto.Username);
+                if (existingUser != null)
+                {
+                    throw new InvalidOperationException("Username is already taken.");
+                }
+                user.Username = updateDto.Username;
+            }
+
+            if (!string.IsNullOrWhiteSpace(updateDto.Email) && user.Email != updateDto.Email)
+            {
+                var existingUser = await _userRepository.GetUserByEmailAsync(updateDto.Email);
+                if (existingUser != null)
+                {
+                    throw new InvalidOperationException("Email is already taken.");
+                }
+                user.Email = updateDto.Email;
+            }
+
+            // Update UserProfile - EF Core will track changes
+            if (user.UserProfile != null)
+            {
+                user.UserProfile.PhoneNumber = updateDto.PhoneNumber ?? user.UserProfile.PhoneNumber;
+                user.UserProfile.Address = updateDto.Address ?? user.UserProfile.Address;
+                user.UserProfile.City = updateDto.City ?? user.UserProfile.City;
+                user.UserProfile.State = updateDto.State ?? user.UserProfile.State;
+                user.UserProfile.ZipCode = updateDto.ZipCode ?? user.UserProfile.ZipCode;
+                user.UserProfile.Gender = updateDto.Gender ?? user.UserProfile.Gender;
+                user.UserProfile.EmergencyContactName = updateDto.EmergencyContactName ?? user.UserProfile.EmergencyContactName;
+                user.UserProfile.EmergencyContactPhone = updateDto.EmergencyContactPhone ?? user.UserProfile.EmergencyContactPhone;
+                user.UserProfile.UpdatedDate = DateTime.UtcNow;
+            }
+
+            await _userRepository.UpdateUserAsync(user);
+
+            return await GetUserByIdAsync(userId);
+        }
+
         private UserSummaryDto MapToUserSummaryDto(User user)
         {
             return new UserSummaryDto

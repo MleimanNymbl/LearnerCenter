@@ -12,6 +12,7 @@ import UserRegistration from './pages/UserRegistration';
 import RegistrationSuccess from './pages/RegistrationSuccess';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import Profile from './pages/Profile';
 
 // Create Material-UI theme
 const theme = createTheme({
@@ -56,6 +57,13 @@ function App() {
                 <ProtectedRoute requireAuth={true}>
                   <Header />
                   <Dashboard />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/profile" element={
+                <ProtectedRoute requireAuth={true}>
+                  <Header />
+                  <Profile />
                 </ProtectedRoute>
               } />
               
