@@ -36,6 +36,7 @@ namespace LearnerCenter.API.Models.DTOs
         public string? Degree { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 
     public class UpdateProfileDto

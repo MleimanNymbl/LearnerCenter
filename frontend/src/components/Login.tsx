@@ -39,7 +39,19 @@ const Login: React.FC = () => {
       navigate(from, { replace: true });
     } catch (error: any) {
       console.error('Login failed:', error);
-      setError(error.response?.data?.message || error.message || 'Login failed. Please try again.');
+      
+      // Handle different error scenarios
+      if (error.response?.status === 401) {
+        setError('Invalid email or password. Please check your credentials and try again.');
+      } else if (error.response?.status === 404) {
+        setError('User account not found. Please check your email or create a new account.');
+      } else if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else if (error.message) {
+        setError(error.message);
+      } else {
+        setError('Login failed. Please try again later.');
+      }
     }
   };
 

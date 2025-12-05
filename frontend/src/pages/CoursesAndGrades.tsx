@@ -43,6 +43,7 @@ const CoursesAndGrades: React.FC = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       if (!user?.enrollmentId) {
+
         setLoading(false);
         return;
       }
@@ -96,7 +97,6 @@ const CoursesAndGrades: React.FC = () => {
           View all your courses, grades, and academic performance.
         </Typography>
       </Box>
-
       {/* Page Grid */}
       <Box sx={{ display: 'flex', gap: 3, maxWidth: '1400px', mx: 'auto' }}>
         {/* Left Column - All Courses Card */}
@@ -167,14 +167,46 @@ const CoursesAndGrades: React.FC = () => {
           {/* My Programs Card */}
           <Card sx={{ minHeight: 285 }}>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Assignment color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">My Programs</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Assignment color="primary" sx={{ mr: 1 }} />
+                  <Typography variant="h6">My Programs</Typography>
+                </Box>
+                {user?.enrollment && <StatusChip status="Active" />}
               </Box>
               <Divider sx={{ mb: 2 }} />
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
-                <Typography color="textSecondary">Program information coming soon.</Typography>
-              </Box>
+              {user?.enrollment ? (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+                  <Box>
+                    <Typography variant="caption" color="textSecondary" display="block">
+                      PROGRAM NAME
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {user.enrollment.programName}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" color="textSecondary" display="block">
+                      DEGREE
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {user.enrollment.degree || 'N/A'}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" color="textSecondary" display="block">
+                      ENROLLMENT DATE
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {user.enrollment.createdDate 
+                        ? new Date(user.enrollment.createdDate.split(' ')[0]).toLocaleDateString()
+                        : 'N/A'}
+                    </Typography>
+                  </Box>
+                </Box>
+              ) : (
+                <Typography color="textSecondary">No enrollment information available.</Typography>
+              )}
             </CardContent>
           </Card>
 

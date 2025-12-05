@@ -55,19 +55,19 @@ const Dashboard: React.FC = () => {
         const response = await coursesApi.getCoursesByEnrollment(user.enrollmentId);
         const coursesData = Array.isArray(response) ? response : response.data;
         const topThree = coursesData.slice(0, 3);
-        
+
         // Assign showcase statuses: first is Active, others are random
         const showcaseStatuses: StatusType[] = ['In Progress', 'Blocked', 'Done'];
         const coursesWithStatus = topThree.map((course: Course, index: number) => ({
           ...course,
           status: index === 0 ? 'Active' : showcaseStatuses[index - 1]
         }));
-        
+
         // Set the first course as the current/active course
         if (coursesWithStatus.length > 0) {
           setCurrentCourse(coursesWithStatus[0]);
         }
-        
+
         setCourses(coursesWithStatus);
       } catch (err: any) {
         console.error('Failed to fetch courses:', err);
@@ -79,7 +79,7 @@ const Dashboard: React.FC = () => {
 
     fetchCourses();
   }, [user?.enrollmentId]);
-  
+
   return (
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       {/* Header */}
@@ -107,7 +107,7 @@ const Dashboard: React.FC = () => {
                 {currentCourse && <StatusChip status={currentCourse.status || 'Active'} />}
               </Box>
               <Divider sx={{ mb: 2 }} />
-              
+
               {loading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
                   <CircularProgress />
@@ -120,7 +120,7 @@ const Dashboard: React.FC = () => {
                   <Typography variant="h4" sx={{ fontWeight: 600, mb: 1, color: '#1976d2' }}>
                     {currentCourse.courseName}
                   </Typography>
-                  
+
                   {/* Course Metadata */}
                   <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
                     <Box>
@@ -153,12 +153,20 @@ const Dashboard: React.FC = () => {
                     </Box>
                   )}
 
-                  {/* Continue Learning Button */}
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 'auto', pt: 3 }}>
-                    <Button variant="contained" color="primary" size="large">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      component="a"
+                      href="https://www.youtube.com/watch?v=ub82Xb1C8os"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Continue Learning
                     </Button>
                   </Box>
+
                 </>
               ) : (
                 <Typography color="textSecondary" sx={{ textAlign: 'center', mt: 4 }}>
@@ -176,7 +184,7 @@ const Dashboard: React.FC = () => {
                 <Typography variant="h6">Upcoming Courses</Typography>
               </Box>
               <Divider sx={{ mb: 2 }} />
-              
+
               {/* Course Table - 75% height and width */}
               <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
                 {loading ? (
@@ -227,12 +235,46 @@ const Dashboard: React.FC = () => {
           {/* My Programs Card */}
           <Card sx={{ flex: 1 }}>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Assignment color="primary" sx={{ mr: 1 }} />
-                <Typography variant="h6">My Programs</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Assignment color="primary" sx={{ mr: 1 }} />
+                  <Typography variant="h6">My Programs</Typography>
+                </Box>
+                {user?.enrollment && <StatusChip status="Active" />}
               </Box>
               <Divider sx={{ mb: 2 }} />
-              {/* Content will be added later */}
+              {user?.enrollment ? (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+                  <Box>
+                    <Typography variant="caption" color="textSecondary" display="block">
+                      PROGRAM NAME
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {user.enrollment.programName}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" color="textSecondary" display="block">
+                      DEGREE
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {user.enrollment.degree || 'N/A'}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" color="textSecondary" display="block">
+                      ENROLLMENT DATE
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {user.enrollment.createdDate
+                        ? new Date(user.enrollment.createdDate).toLocaleDateString()
+                        : 'N/A'}
+                    </Typography>
+                  </Box>
+                </Box>
+              ) : (
+                <Typography color="textSecondary">No enrollment information available.</Typography>
+              )}
             </CardContent>
           </Card>
 

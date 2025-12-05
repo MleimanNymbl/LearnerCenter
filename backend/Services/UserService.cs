@@ -248,7 +248,8 @@ namespace LearnerCenter.API.Services
                     ProgramName = user.CurrentEnrollment.ProgramName,
                     Degree = user.CurrentEnrollment.Degree,
                     Description = user.CurrentEnrollment.Description,
-                    IsActive = user.CurrentEnrollment.IsActive
+                    IsActive = user.CurrentEnrollment.IsActive,
+                    CreatedDate = user.CurrentEnrollment.CreatedDate
                 }
             };
         }

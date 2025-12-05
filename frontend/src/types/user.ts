@@ -26,6 +26,14 @@ export interface User {
     emergencyContactName?: string;
     emergencyContactPhone?: string;
   };
+  enrollment?: {
+    enrollmentId: string;
+    programName: string;
+    degree?: string;
+    description?: string;
+    isActive: boolean;
+    createdDate: string;
+  };
 }
 
 export interface UserProfile {
