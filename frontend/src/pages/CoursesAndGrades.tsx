@@ -34,11 +34,32 @@ interface Course {
   completedDate?: string;
 }
 
+// Helper function to convert letter grade to GPA points
+const gradeToGPA = (grade: string): number => {
+  const gradeMap: { [key: string]: number } = {
+    'A': 4.0,
+    'A-': 3.7,
+    'B+': 3.3,
+    'B': 3.0,
+    'B-': 2.7,
+    'C+': 2.3,
+    'C': 2.0,
+    'C-': 1.7,
+    'D+': 1.3,
+    'D': 1.0,
+    'F': 0.0,
+  };
+  return gradeMap[grade] || 0.0;
+};
+
 const CoursesAndGrades: React.FC = () => {
   const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentGPA, setCurrentGPA] = useState<number>(0);
+  const [totalCreditsEarned, setTotalCreditsEarned] = useState<number>(0);
+  const [totalCreditsRequired, setTotalCreditsRequired] = useState<number>(0);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -75,6 +96,29 @@ const CoursesAndGrades: React.FC = () => {
         }));
         
         setCourses(coursesWithStatus);
+        
+        // Calculate GPA and credits
+        let totalGradePoints = 0;
+        let totalCreditHours = 0;
+        let earnedCredits = 0;
+        
+        coursesWithStatus.forEach((course: Course) => {
+          const creditHours = course.creditHours || 0;
+          totalCreditHours += creditHours;
+          
+          // Only count completed courses (Done status) for earned credits
+          if (course.status === 'Done' && course.grade) {
+            const gpa = gradeToGPA(course.grade);
+            totalGradePoints += gpa * creditHours;
+            earnedCredits += creditHours;
+          }
+        });
+        
+        // Calculate GPA (only from completed courses)
+        const gpa = earnedCredits > 0 ? totalGradePoints / earnedCredits : 0;
+        setCurrentGPA(parseFloat(gpa.toFixed(2)));
+        setTotalCreditsEarned(earnedCredits);
+        setTotalCreditsRequired(totalCreditHours);
       } catch (err: any) {
         console.error('Failed to fetch courses:', err);
         setError('Failed to load courses. Please try again later.');
@@ -224,10 +268,10 @@ const CoursesAndGrades: React.FC = () => {
                     CURRENT GPA
                   </Typography>
                   <Typography variant="h4" sx={{ fontWeight: 600, color: '#1976d2' }}>
-                    -
+                    {loading ? '-' : currentGPA.toFixed(2)}
                   </Typography>
                   <Typography variant="caption" color="textSecondary">
-                    Coming soon
+                    {!loading && `Based on ${totalCreditsEarned} completed credits`}
                   </Typography>
                 </Box>
                 <Box>
@@ -235,10 +279,10 @@ const CoursesAndGrades: React.FC = () => {
                     TOTAL CREDITS
                   </Typography>
                   <Typography variant="h4" sx={{ fontWeight: 600, color: '#1976d2' }}>
-                    -
+                    {loading ? '-' : `${totalCreditsEarned} / ${totalCreditsRequired}`}
                   </Typography>
                   <Typography variant="caption" color="textSecondary">
-                    Coming soon
+                    {!loading && `${totalCreditsRequired - totalCreditsEarned} credits remaining`}
                   </Typography>
                 </Box>
               </Box>
