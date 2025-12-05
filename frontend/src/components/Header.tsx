@@ -17,6 +17,7 @@ import {
   School,
   People,
   Assignment,
+  MenuBook,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -58,7 +59,15 @@ const Header: React.FC = () => {
         {isAuthenticated ? (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {/* Navigation buttons based on user role */}
-
+            
+            <Button
+              color="inherit"
+              startIcon={<Dashboard />}
+              onClick={() => navigate('/dashboard')}
+            >
+              Dashboard
+            </Button>
+            
             {(user?.role === UserRole.Admin || user?.role === UserRole.Instructor) && (
               <Button
                 color="inherit"

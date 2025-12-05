@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { School, Assignment, CreditCard, CheckCircle } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { coursesApi } from '../services/apiService';
 import StatusChip, { StatusType } from './common/StatusChip';
 
@@ -35,6 +36,7 @@ interface Course {
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]);
   const [currentCourse, setCurrentCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
@@ -212,7 +214,7 @@ const Dashboard: React.FC = () => {
               </Box>
 
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                <Button variant="outlined" color="primary">
+                <Button variant="outlined" color="primary" onClick={() => navigate('/courses')}>
                   View All Courses
                 </Button>
               </Box>
