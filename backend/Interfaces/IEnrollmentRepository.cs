@@ -7,5 +7,6 @@ namespace LearnerCenter.API.Interfaces
         Task<IEnumerable<Enrollment>> GetAllEnrollmentsAsync();
         Task<Enrollment?> GetEnrollmentByIdAsync(Guid enrollmentId);
         Task<IEnumerable<Enrollment>> GetEnrollmentsByCampusAsync(Guid campusId);
+        Task<bool> UpdateEnrollmentCostAsync(Guid enrollmentId, decimal newCost);
     }
 }

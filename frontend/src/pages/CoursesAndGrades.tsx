@@ -144,9 +144,9 @@ const CoursesAndGrades: React.FC = () => {
         </Typography>
       </Box>
       {/* Page Grid */}
-      <Box sx={{ display: 'flex', gap: 3, maxWidth: '1400px', mx: 'auto' }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, maxWidth: '1400px', mx: 'auto' }}>
         {/* Left Column - All Courses Card */}
-        <Box sx={{ flex: '0 0 66%' }}>
+        <Box sx={{ flex: { xs: '1', md: '0 0 66%' } }}>
           <Card sx={{ minHeight: 600 }}>
             <CardContent sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -168,7 +168,7 @@ const CoursesAndGrades: React.FC = () => {
                     No courses found for your enrollment.
                   </Typography>
                 ) : (
-                  <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none' }}>
+                  <TableContainer component={Paper} sx={{ boxShadow: 'none', border: 'none', overflowX: 'auto' }}>
                     <Table sx={{ '& .MuiTableCell-root': { border: 'none' } }}>
                       <TableHead>
                         <TableRow>
@@ -209,7 +209,7 @@ const CoursesAndGrades: React.FC = () => {
         </Box>
 
         {/* Right Column - My Programs & My Grades Cards */}
-        <Box sx={{ flex: '0 0 33%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Box sx={{ flex: { xs: '1', md: '0 0 33%' }, display: 'flex', flexDirection: 'column', gap: 3 }}>
           {/* My Programs Card */}
           <Card sx={{ minHeight: 285 }}>
             <CardContent>

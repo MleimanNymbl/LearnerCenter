@@ -88,5 +88,29 @@ namespace LearnerCenter.API.Controllers
                 return StatusCode(500, "An error occurred while retrieving courses");
             }
         }
+
+        [HttpPost("{enrollmentId}/payment")]
+        public async Task<ActionResult> ProcessPayment(Guid enrollmentId, [FromBody] PaymentRequestDto paymentRequest)
+        {
+            try
+            {
+                _logger.LogInformation("Processing payment of {Amount} for enrollment {EnrollmentId}", paymentRequest.Amount, enrollmentId);
+                
+                var success = await _enrollmentService.ProcessPaymentAsync(enrollmentId, paymentRequest.Amount);
+                
+                if (!success)
+                {
+                    return NotFound($"Enrollment with ID {enrollmentId} not found");
+                }
+                
+                _logger.LogInformation("Payment processed successfully for enrollment {EnrollmentId}", enrollmentId);
+                return Ok(new { success = true, message = "Payment processed successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing payment for enrollment {EnrollmentId}", enrollmentId);
+                return StatusCode(500, "An error occurred while processing the payment");
+            }
+        }
     }
 }

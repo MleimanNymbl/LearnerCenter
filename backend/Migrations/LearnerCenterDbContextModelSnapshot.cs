@@ -17,10 +17,9 @@ namespace LearnerCenter.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("LearnerCenter.API.Models.Campus", b =>
                 {
@@ -74,7 +73,7 @@ namespace LearnerCenter.API.Migrations
                     b.HasIndex("CampusCode")
                         .IsUnique();
 
-                    b.ToTable("Campuses");
+                    b.ToTable("Campuses", (string)null);
 
                     b.HasData(
                         new
@@ -330,7 +329,7 @@ namespace LearnerCenter.API.Migrations
                     b.HasIndex("CourseCode", "EnrollmentId")
                         .IsUnique();
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
 
                     b.HasData(
                         new
@@ -2557,6 +2556,9 @@ namespace LearnerCenter.API.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(10,2)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -2575,13 +2577,14 @@ namespace LearnerCenter.API.Migrations
                     b.HasIndex("ProgramName", "CampusId")
                         .IsUnique();
 
-                    b.ToTable("Enrollments");
+                    b.ToTable("Enrollments", (string)null);
 
                     b.HasData(
                         new
                         {
                             EnrollmentId = new Guid("00000001-6e65-6f72-6c6c-6d6501000000"),
                             CampusId = new Guid("00000001-6163-706d-7573-202001000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Comprehensive computer science program covering programming, algorithms, and software engineering",
@@ -2592,6 +2595,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000002-6e65-6f72-6c6c-6d6502000000"),
                             CampusId = new Guid("00000001-6163-706d-7573-202001000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Engineering",
                             Description = "Engineering fundamentals with multiple specializations available",
@@ -2602,6 +2606,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000003-6e65-6f72-6c6c-6d6503000000"),
                             CampusId = new Guid("00000001-6163-706d-7573-202001000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Business Administration",
                             Description = "Comprehensive business management and leadership program",
@@ -2612,6 +2617,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000004-6e65-6f72-6c6c-6d6504000000"),
                             CampusId = new Guid("00000002-6163-706d-7573-202002000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Science in Nursing",
                             Description = "Registered nurse preparation program with clinical experience",
@@ -2622,6 +2628,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000005-6e65-6f72-6c6c-6d6505000000"),
                             CampusId = new Guid("00000002-6163-706d-7573-202002000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Information security and ethical hacking program",
@@ -2632,6 +2639,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000006-6e65-6f72-6c6c-6d6506000000"),
                             CampusId = new Guid("00000002-6163-706d-7573-202002000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Modern marketing strategies and social media management",
@@ -2642,6 +2650,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000007-6e65-6f72-6c6c-6d6507000000"),
                             CampusId = new Guid("00000003-6163-706d-7573-202003000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Automotive repair and maintenance certification program",
@@ -2652,6 +2661,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000008-6e65-6f72-6c6c-6d6508000000"),
                             CampusId = new Guid("00000003-6163-706d-7573-202003000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Professional culinary techniques and food service management",
@@ -2662,6 +2672,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("00000009-6e65-6f72-6c6c-6d6509000000"),
                             CampusId = new Guid("00000004-6163-706d-7573-202004000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Fine Arts",
                             Description = "Visual communication and digital design program",
@@ -2672,6 +2683,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000a-6e65-6f72-6c6c-6d650a000000"),
                             CampusId = new Guid("00000004-6163-706d-7573-202004000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Modern web technologies and full-stack development",
@@ -2682,6 +2694,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000b-6e65-6f72-6c6c-6d650b000000"),
                             CampusId = new Guid("00000005-6163-706d-7573-202005000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Bachelor of Science",
                             Description = "Law enforcement and criminal investigation program",
@@ -2692,6 +2705,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000c-6e65-6f72-6c6c-6d650c000000"),
                             CampusId = new Guid("00000005-6163-706d-7573-202005000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Arts",
                             Description = "Child development and early learning education",
@@ -2702,6 +2716,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000d-6e65-6f72-6c6c-6d650d000000"),
                             CampusId = new Guid("00000006-6163-706d-7573-202006000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Heating, ventilation, and air conditioning systems",
@@ -2712,6 +2727,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000e-6e65-6f72-6c6c-6d650e000000"),
                             CampusId = new Guid("00000006-6163-706d-7573-202006000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Physical therapy support and rehabilitation techniques",
@@ -2722,6 +2738,7 @@ namespace LearnerCenter.API.Migrations
                         {
                             EnrollmentId = new Guid("0000000f-6e65-6f72-6c6c-6d650f000000"),
                             CampusId = new Guid("00000006-6163-706d-7573-202006000000"),
+                            Cost = 2500.00m,
                             CreatedDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Utc),
                             Degree = "Associate of Applied Science",
                             Description = "Animal care and veterinary assistant training",
@@ -2871,7 +2888,7 @@ namespace LearnerCenter.API.Migrations
                     b.HasIndex("TermCode")
                         .IsUnique();
 
-                    b.ToTable("Terms");
+                    b.ToTable("Terms", (string)null);
                 });
 
             modelBuilder.Entity("LearnerCenter.API.Models.User", b =>
@@ -2923,7 +2940,7 @@ namespace LearnerCenter.API.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("LearnerCenter.API.Models.UserProfile", b =>
@@ -2993,7 +3010,7 @@ namespace LearnerCenter.API.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("LearnerCenter.API.Models.Course", b =>

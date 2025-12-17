@@ -17,7 +17,8 @@ type AuthAction =
   | { type: 'LOGIN_FAILURE' }
   | { type: 'LOGOUT' }
   | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'UPDATE_USER'; payload: User };
+  | { type: 'UPDATE_USER'; payload: User }
+  | { type: 'REFRESH_USER' };
 
 // Auth context interface
 interface AuthContextType extends AuthState {
@@ -25,6 +26,7 @@ interface AuthContextType extends AuthState {
   logout: () => void;
   register: (userData: any) => Promise<void>;
   updateProfile: (userData: Partial<User>) => void;
+  refreshUser: () => Promise<void>;
 }
 
 // Initial state
@@ -184,10 +186,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Update profile function
   const updateProfile = (userData: Partial<User>): void => {
     if (state.user) {
+      const updatedUser = { ...state.user, ...userData };
       dispatch({
         type: 'UPDATE_USER',
-        payload: { ...state.user, ...userData },
+        payload: updatedUser,
       });
+      // Update localStorage as well
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+  };
+
+  // Refresh user data function
+  const refreshUser = async (): Promise<void> => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const response = await authApi.getProfile();
+        if (response.data.success) {
+          dispatch({
+            type: 'LOGIN_SUCCESS',
+            payload: {
+              user: response.data.data,
+              token,
+            },
+          });
+        }
+      } catch (error) {
+        console.error('Failed to refresh user data:', error);
+      }
     }
   };
 
@@ -197,6 +223,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     register,
     updateProfile,
+    refreshUser,
   };
 
   return (

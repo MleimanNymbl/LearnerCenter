@@ -40,5 +40,20 @@ namespace LearnerCenter.API.Repositories
                 .OrderBy(e => e.Campus.CampusName)
                 .ToListAsync();
         }
+
+        public async Task<bool> UpdateEnrollmentCostAsync(Guid enrollmentId, decimal newCost)
+        {
+            var enrollment = await _context.Enrollments.FindAsync(enrollmentId);
+            if (enrollment == null)
+            {
+                return false;
+            }
+
+            enrollment.Cost = newCost;
+            enrollment.UpdatedDate = DateTime.UtcNow;
+            
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

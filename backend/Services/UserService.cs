@@ -249,7 +249,8 @@ namespace LearnerCenter.API.Services
                     Degree = user.CurrentEnrollment.Degree,
                     Description = user.CurrentEnrollment.Description,
                     IsActive = user.CurrentEnrollment.IsActive,
-                    CreatedDate = user.CurrentEnrollment.CreatedDate
+                    CreatedDate = user.CurrentEnrollment.CreatedDate,
+                    Cost = user.CurrentEnrollment.Cost
                 }
             };
         }

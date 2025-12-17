@@ -48,26 +48,32 @@ const Header: React.FC = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}
+    <AppBar position="static" sx={{ backgroundColor: '#263238', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+      <Toolbar sx={{ py: 1.5 }}>
+        <Box 
+          sx={{ 
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            gap: 1.5
+          }}
           onClick={() => navigate('/dashboard')}
         >
-          Learner Center
-        </Typography>
+          <School sx={{ fontSize: 42, color: '#2196f3' }} />
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.5px' }}>
+              UNIVERSITY
+            </Typography>
+            <Typography variant="caption" sx={{ fontSize: '0.7rem', lineHeight: 1, color: '#b0bec5' }}>
+              Learning Portal
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ flexGrow: 1 }} />
 
         {isAuthenticated ? (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {/* Navigation buttons based on user role */}
-            
-            <Button
-              color="inherit"
-              startIcon={<Dashboard />}
-              onClick={() => navigate('/dashboard')}
-            >
-              Dashboard
-            </Button>
-            
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>            
             {(user?.role === UserRole.Admin || user?.role === UserRole.Instructor) && (
               <Button
                 color="inherit"

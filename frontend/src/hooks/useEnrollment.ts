@@ -7,6 +7,7 @@ interface Enrollment {
   description?: string;
   isActive: boolean;
   createdDate: string;
+  cost?: number;
 }
 
 export const useEnrollment = (): Enrollment | null => {

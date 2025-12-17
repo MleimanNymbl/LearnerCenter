@@ -23,6 +23,9 @@ namespace LearnerCenter.API.Models
         [StringLength(500)]
         public string? Description { get; set; }
 
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Cost { get; set; } = 2500.00m;
+
         [Required]
         public bool IsActive { get; set; } = true;
 

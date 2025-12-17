@@ -30,6 +30,23 @@ namespace LearnerCenter.API.Services
             return enrollments.Select(MapToDto);
         }
 
+        public async Task<bool> ProcessPaymentAsync(Guid enrollmentId, decimal amount)
+        {
+            var enrollment = await _enrollmentRepository.GetEnrollmentByIdAsync(enrollmentId);
+            if (enrollment == null)
+            {
+                return false;
+            }
+
+            var newCost = enrollment.Cost - amount;
+            if (newCost < 0)
+            {
+                newCost = 0;
+            }
+
+            return await _enrollmentRepository.UpdateEnrollmentCostAsync(enrollmentId, newCost);
+        }
+
         private static EnrollmentDto MapToDto(Models.Enrollment enrollment)
         {
             return new EnrollmentDto
@@ -39,7 +56,7 @@ namespace LearnerCenter.API.Services
                 Description = enrollment.Description ?? string.Empty,
                 ProgramType = enrollment.Degree ?? "Certificate",
                 DurationWeeks = 16, // Default duration - can be added to model later
-                Cost = 2500, // Default cost - can be added to model later  
+                Cost = enrollment.Cost,
                 IsActive = enrollment.IsActive,
                 CreatedAt = enrollment.CreatedDate,
                 UpdatedAt = enrollment.UpdatedDate ?? enrollment.CreatedDate,

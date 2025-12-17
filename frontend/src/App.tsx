@@ -14,6 +14,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Profile from './pages/Profile';
 import CoursesAndGrades from './pages/CoursesAndGrades';
+import Payment from './pages/Payment';
 
 // Create Material-UI theme
 const theme = createTheme({
@@ -72,6 +73,13 @@ function App() {
                 <ProtectedRoute requireAuth={true}>
                   <Header />
                   <CoursesAndGrades />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/payment" element={
+                <ProtectedRoute requireAuth={true}>
+                  <Header />
+                  <Payment />
                 </ProtectedRoute>
               } />
               
